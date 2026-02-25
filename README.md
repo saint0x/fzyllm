@@ -1,6 +1,6 @@
 # fzyllm
 
-`fzyllm` is a small LLM runtime written in fzy (fozzylang) as a public exhibition project.
+`fzyllm` is a small agentic runtime written in fzy (fozzylang) as a public exhibition project.
 
 The point is not the app itself. The point is showing what fzy (fozzylang) feels like in a real, running system.
 
