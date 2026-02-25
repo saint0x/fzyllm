@@ -6,27 +6,21 @@ enum FailureClass {
 }
 
 fn failure_class_code(class: FailureClass) -> i32 {
-    if class == FailureClass::SpawnFailure {
-        return 11
-    }
-    if class == FailureClass::Timeout {
-        return 12
-    }
-    if class == FailureClass::NonzeroExit {
-        return 13
+    match class {
+        FailureClass::SpawnFailure => return 11,
+        FailureClass::Timeout => return 12,
+        FailureClass::NonzeroExit => return 13,
+        _ => return 14,
     }
     return 14
 }
 
 fn failure_class_label(class: FailureClass) -> str {
-    if class == FailureClass::SpawnFailure {
-        return "spawn_failure"
-    }
-    if class == FailureClass::Timeout {
-        return "timeout"
-    }
-    if class == FailureClass::NonzeroExit {
-        return "nonzero_exit"
+    match class {
+        FailureClass::SpawnFailure => return "spawn_failure",
+        FailureClass::Timeout => return "timeout",
+        FailureClass::NonzeroExit => return "nonzero_exit",
+        _ => return "malformed_output",
     }
     return "malformed_output"
 }

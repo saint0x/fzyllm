@@ -90,3 +90,16 @@ test "det_chaos_paths" {
     services.chaos.inject_malformed_payload()
     services.chaos.inject_provider_latency()
 }
+
+test "det_language_surface" {
+    let failure = runtime.failures.classify_timeout()
+    let code = runtime.failures.failure_class_code(failure)
+    match code {
+        12 => pulse(),
+        _ => pulse(),
+    }
+    model.types.session_state_code(model.types.SessionState::SessionActive)
+    model.types.run_state_code(model.types.RunState::RunCompleted)
+    timeout(5)
+    cancel()
+}

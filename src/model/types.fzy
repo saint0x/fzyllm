@@ -53,66 +53,51 @@ struct RunView {
 }
 
 fn session_state_code(state: SessionState) -> i32 {
-    if state == SessionState::SessionPending {
-        return 0
-    }
-    if state == SessionState::SessionActive {
-        return 1
-    }
-    if state == SessionState::SessionClosing {
-        return 2
+    match state {
+        SessionState::SessionPending => return 0,
+        SessionState::SessionActive => return 1,
+        SessionState::SessionClosing => return 2,
+        _ => return 3,
     }
     return 3
 }
 
 fn tool_health_code(health: ToolHealth) -> i32 {
-    if health == ToolHealth::ToolUnknown {
-        return 0
-    }
-    if health == ToolHealth::ToolHealthy {
-        return 1
-    }
-    if health == ToolHealth::ToolDegraded {
-        return 2
+    match health {
+        ToolHealth::ToolUnknown => return 0,
+        ToolHealth::ToolHealthy => return 1,
+        ToolHealth::ToolDegraded => return 2,
+        _ => return 3,
     }
     return 3
 }
 
 fn run_state_code(state: RunState) -> i32 {
-    if state == RunState::RunQueued {
-        return 0
-    }
-    if state == RunState::RunRunning {
-        return 1
-    }
-    if state == RunState::RunCompleted {
-        return 2
+    match state {
+        RunState::RunQueued => return 0,
+        RunState::RunRunning => return 1,
+        RunState::RunCompleted => return 2,
+        _ => return 3,
     }
     return 3
 }
 
 fn session_state_label(state: SessionState) -> str {
-    if state == SessionState::SessionPending {
-        return "pending"
-    }
-    if state == SessionState::SessionActive {
-        return "active"
-    }
-    if state == SessionState::SessionClosing {
-        return "closing"
+    match state {
+        SessionState::SessionPending => return "pending",
+        SessionState::SessionActive => return "active",
+        SessionState::SessionClosing => return "closing",
+        _ => return "failed",
     }
     return "failed"
 }
 
 fn run_state_label(state: RunState) -> str {
-    if state == RunState::RunQueued {
-        return "queued"
-    }
-    if state == RunState::RunRunning {
-        return "running"
-    }
-    if state == RunState::RunCompleted {
-        return "completed"
+    match state {
+        RunState::RunQueued => return "queued",
+        RunState::RunRunning => return "running",
+        RunState::RunCompleted => return "completed",
+        _ => return "failed",
     }
     return "failed"
 }
