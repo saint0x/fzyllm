@@ -1,0 +1,18 @@
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Fozzy build/runtime artifacts
+.fz/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+local.env
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp

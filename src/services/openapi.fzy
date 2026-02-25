@@ -1,0 +1,11 @@
+use core.fs;
+
+fn export_spec() -> i32 {
+    fs.atomic_write()
+    return 0
+}
+
+fn validate_schema() -> i32 {
+    fs.fsync()
+    return 0
+}

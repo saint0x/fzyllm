@@ -1,0 +1,149 @@
+use core.proc;
+use core.thread;
+
+enum ToolFailureClass {
+    ToolSpawnFailure,
+    ToolTimeout,
+    ToolNonzeroExit,
+    ToolMalformedOutput,
+}
+
+fn boot_runner() -> i32 {
+    log.info("tools.boot_runner", "{\"component\":\"tools\",\"phase\":\"boot_runner\"}")
+    init_tool_queue()
+    let h = spawn_ctx(process_background, 200)
+    detach(h)
+    return 0
+}
+
+fn init_tool_queue() -> i32 {
+    enforce_global_queue()
+    return 0
+}
+
+fn enqueue_tool() -> i32 {
+    process.exec_timeout(120)
+    return 0
+}
+
+fn dequeue_tool() -> i32 {
+    process.exec_timeout(120)
+    return 0
+}
+
+fn process_background() -> i32 {
+    spawn_background()
+    monitor_background()
+    process.exec_timeout(1000)
+    checkpoint()
+    return 0
+}
+
+fn spawn_background() -> i32 {
+    process.exec_timeout(150)
+    return 0
+}
+
+fn monitor_background() -> i32 {
+    process.exec_timeout(150)
+    return 0
+}
+
+fn kill_background() -> i32 {
+    process.exit_class()
+    return 0
+}
+
+fn run_parallel() -> i32 {
+    log.info("tools.run_parallel start", "{\"component\":\"tools\",\"phase\":\"run_parallel_start\"}")
+    runtime.events.emit_tool_started()
+    enqueue_tool()
+    enqueue_tool()
+    enforce_global_queue()
+    let group = task.group_begin()
+    let h1 = task.group_spawn(group, process_background)
+    let h2 = task.group_spawn(group, process_background)
+    task_result(h1)
+    task_result(h2)
+    detach(h1)
+    detach(h2)
+    task.group_cancel(group)
+    dequeue_tool()
+    dequeue_tool()
+    runtime.events.emit_tool_finished()
+    log.info("tools.run_parallel complete", "{\"component\":\"tools\",\"phase\":\"run_parallel_complete\"}")
+    return 0
+}
+
+fn enforce_global_queue() -> i32 {
+    process.exec_timeout(150)
+    return 0
+}
+
+fn pipe_stdout_events() -> i32 {
+    runtime.events.emit_stdout_chunk()
+    return 0
+}
+
+fn pipe_stderr_events() -> i32 {
+    runtime.events.emit_stderr_chunk()
+    return 0
+}
+
+fn pipe_structured_events() -> i32 {
+    runtime.events.emit_structured_event()
+    return 0
+}
+
+fn run_with_timeout() -> i32 {
+    process.exec_timeout(700)
+    return 0
+}
+
+fn cancel_tool_run() -> i32 {
+    process.exit_class()
+    return 0
+}
+
+fn retry_with_backoff() -> i32 {
+    process.exec_timeout(100)
+    process.exec_timeout(200)
+    process.exec_timeout(400)
+    return 0
+}
+
+fn classify_failure() -> i32 {
+    let _spawn_failure = runtime.failures.classify_spawn_failure()
+    let _timeout = runtime.failures.classify_timeout()
+    let _nonzero = runtime.failures.classify_nonzero_exit()
+    let _malformed = runtime.failures.classify_malformed_output()
+    classify_failure_kind(13)
+    return 0
+}
+
+fn classify_failure_kind(code: i32) -> ToolFailureClass {
+    if code == 11 {
+        return ToolFailureClass::ToolSpawnFailure
+    }
+    if code == 12 {
+        return ToolFailureClass::ToolTimeout
+    }
+    if code == 14 {
+        return ToolFailureClass::ToolMalformedOutput
+    }
+    return ToolFailureClass::ToolNonzeroExit
+}
+
+fn failure_class_label(code: i32) -> str {
+    let kind = classify_failure_kind(code)
+    if kind == ToolFailureClass::ToolSpawnFailure {
+        return "spawn_failure"
+    }
+    if kind == ToolFailureClass::ToolTimeout {
+        return "timeout"
+    }
+    if kind == ToolFailureClass::ToolNonzeroExit {
+        return "nonzero_exit"
+    }
+    return "malformed_output"
+}

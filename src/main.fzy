@@ -1,0 +1,34 @@
+use core.time;
+use core.fs;
+use core.net;
+use core.proc;
+use core.mem;
+use core.thread;
+
+mod api;
+mod model;
+mod services;
+mod runtime;
+mod cli;
+mod tests;
+
+fn main() -> i32 {
+    requires true
+
+    log.info("anthropic_smoke main starting", "{\"component\":\"main\",\"phase\":\"boot\"}")
+    model.preflight()
+    log.info("anthropic_smoke model preflight complete", "{\"component\":\"main\",\"phase\":\"model_preflight\"}")
+    cli.boot()
+    log.info("anthropic_smoke cli boot complete", "{\"component\":\"main\",\"phase\":\"cli_boot\"}")
+    services.boot_all()
+    log.info("anthropic_smoke services boot complete", "{\"component\":\"main\",\"phase\":\"services_boot\"}")
+    runtime.start()
+    log.info("anthropic_smoke runtime start complete", "{\"component\":\"main\",\"phase\":\"runtime_start\"}")
+    api.touch()
+    log.info("anthropic_smoke api touch complete", "{\"component\":\"main\",\"phase\":\"api_touch\"}")
+    log.info("anthropic_smoke entering serve_forever", "{\"component\":\"main\",\"phase\":\"serve_forever\"}")
+    services.web.serve_forever()
+
+    ensures true
+    return 0
+}

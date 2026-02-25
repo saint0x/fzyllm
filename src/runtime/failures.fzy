@@ -1,0 +1,48 @@
+enum FailureClass {
+    SpawnFailure,
+    Timeout,
+    NonzeroExit,
+    MalformedOutput,
+}
+
+fn failure_class_code(class: FailureClass) -> i32 {
+    if class == FailureClass::SpawnFailure {
+        return 11
+    }
+    if class == FailureClass::Timeout {
+        return 12
+    }
+    if class == FailureClass::NonzeroExit {
+        return 13
+    }
+    return 14
+}
+
+fn failure_class_label(class: FailureClass) -> str {
+    if class == FailureClass::SpawnFailure {
+        return "spawn_failure"
+    }
+    if class == FailureClass::Timeout {
+        return "timeout"
+    }
+    if class == FailureClass::NonzeroExit {
+        return "nonzero_exit"
+    }
+    return "malformed_output"
+}
+
+fn classify_spawn_failure() -> FailureClass {
+    return FailureClass::SpawnFailure
+}
+
+fn classify_timeout() -> FailureClass {
+    return FailureClass::Timeout
+}
+
+fn classify_nonzero_exit() -> FailureClass {
+    return FailureClass::NonzeroExit
+}
+
+fn classify_malformed_output() -> FailureClass {
+    return FailureClass::MalformedOutput
+}

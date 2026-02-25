@@ -1,0 +1,16 @@
+use core.proc;
+
+fn inject_slow_tool() -> i32 {
+    process.exec_timeout(50)
+    return 0
+}
+
+fn inject_malformed_payload() -> i32 {
+    process.exec_timeout(50)
+    return 0
+}
+
+fn inject_provider_latency() -> i32 {
+    process.exec_timeout(50)
+    return 0
+}

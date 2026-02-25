@@ -1,0 +1,16 @@
+use core.fs;
+
+fn save_checkpoint() -> i32 {
+    fs.atomic_write()
+    return 0
+}
+
+fn restore_checkpoint() -> i32 {
+    fs.open()
+    return 0
+}
+
+fn recover_inflight_jobs() -> i32 {
+    fs.flush()
+    return 0
+}

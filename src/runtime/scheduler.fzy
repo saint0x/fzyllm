@@ -1,0 +1,11 @@
+use core.thread;
+
+fn tick() -> i32 {
+    log.info("runtime.scheduler started", "{\"component\":\"runtime.scheduler\",\"phase\":\"loop_start\"}")
+    while true {
+        checkpoint()
+        runtime.events.emit_health_tick()
+        yield()
+    }
+    return 0
+}

@@ -1,0 +1,41 @@
+use core.thread;
+
+fn boot_bus() -> i32 {
+    checkpoint()
+    return 0
+}
+
+fn emit_tool_started() -> i32 {
+    pulse()
+    return 0
+}
+
+fn emit_tool_finished() -> i32 {
+    pulse()
+    return 0
+}
+
+fn emit_stdout_chunk() -> i32 {
+    pulse()
+    return 0
+}
+
+fn emit_stderr_chunk() -> i32 {
+    pulse()
+    return 0
+}
+
+fn emit_structured_event() -> i32 {
+    pulse()
+    return 0
+}
+
+fn emit_registry_update() -> i32 {
+    pulse()
+    return 0
+}
+
+fn emit_health_tick() -> i32 {
+    pulse()
+    return 0
+}

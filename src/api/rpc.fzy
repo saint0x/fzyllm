@@ -1,0 +1,8 @@
+rpc CreateSession(req: CreateSessionReq) -> CreateSessionRes;
+rpc PostMessage(req: PostMessageReq) -> PostMessageRes;
+rpc ListTools(req: ListToolsReq) -> ListToolsRes;
+rpc RunTool(req: RunToolReq) -> RunToolRes;
+
+fn rpc_touch() -> i32 {
+    return 0
+}

@@ -1,0 +1,90 @@
+#[repr(C)]
+struct ConversationState {
+    id: i32,
+    turns: i32,
+    state: i32,
+}
+
+#[repr(C)]
+struct ToolJobState {
+    id: i32,
+    status: i32,
+}
+
+#[repr(C)]
+struct ArtifactState {
+    id: i32,
+    kind: i32,
+}
+
+#[repr(C)]
+struct DeadlineState {
+    id: i32,
+    ms: i32,
+}
+
+enum JobStatus {
+    JobQueued,
+    JobRunning,
+    JobCompleted,
+    JobFailed,
+}
+
+enum ArtifactKind {
+    ArtifactText,
+    ArtifactJson,
+    ArtifactBlob,
+}
+
+fn job_status_code(status: JobStatus) -> i32 {
+    if status == JobStatus::JobQueued {
+        return 0
+    }
+    if status == JobStatus::JobRunning {
+        return 1
+    }
+    if status == JobStatus::JobCompleted {
+        return 2
+    }
+    return 3
+}
+
+fn artifact_kind_code(kind: ArtifactKind) -> i32 {
+    if kind == ArtifactKind::ArtifactText {
+        return 1
+    }
+    if kind == ArtifactKind::ArtifactJson {
+        return 2
+    }
+    return 3
+}
+
+fn init_all() -> i32 {
+    init_conversation_state()
+    init_tool_job_state()
+    init_artifact_state()
+    init_deadline_state()
+    return 0
+}
+
+fn init_conversation_state() -> i32 {
+    let view = model.types.session_view_active(1)
+    let encoded = model.types.encode_session_record(view)
+    let _state = ConversationState { id: encoded.id, turns: 0, state: encoded.state }
+    return 0
+}
+
+fn init_tool_job_state() -> i32 {
+    let _tool_job = ToolJobState { id: 1, status: job_status_code(JobStatus::JobQueued) }
+    return 0
+}
+
+fn init_artifact_state() -> i32 {
+    let _artifact = ArtifactState { id: 1, kind: artifact_kind_code(ArtifactKind::ArtifactJson) }
+    return 0
+}
+
+fn init_deadline_state() -> i32 {
+    let _deadline = DeadlineState { id: 1, ms: 8000 }
+    return 0
+}

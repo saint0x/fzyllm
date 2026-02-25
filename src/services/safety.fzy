@@ -1,0 +1,16 @@
+use core.proc;
+
+fn filter_prompt() -> i32 {
+    process.exec_timeout(80)
+    return 0
+}
+
+fn filter_tool_response() -> i32 {
+    process.exec_timeout(80)
+    return 0
+}
+
+fn decide_policy() -> i32 {
+    process.exec_timeout(80)
+    return 0
+}

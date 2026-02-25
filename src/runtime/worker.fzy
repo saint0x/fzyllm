@@ -1,0 +1,11 @@
+use core.thread;
+
+fn run() -> i32 {
+    log.info("runtime.worker started", "{\"component\":\"runtime.worker\",\"phase\":\"loop_start\"}")
+    while true {
+        checkpoint()
+        runtime.events.emit_health_tick()
+        yield()
+    }
+    return 0
+}

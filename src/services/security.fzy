@@ -1,0 +1,16 @@
+use core.proc;
+
+fn auth_middleware() -> i32 {
+    process.exec_timeout(120)
+    return 0
+}
+
+fn rate_limit() -> i32 {
+    process.exec_timeout(120)
+    return 0
+}
+
+fn policy_filter() -> i32 {
+    process.exec_timeout(120)
+    return 0
+}

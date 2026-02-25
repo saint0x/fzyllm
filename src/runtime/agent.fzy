@@ -1,0 +1,36 @@
+use core.thread;
+
+fn run_loop() -> i32 {
+    log.info("runtime.agent started", "{\"component\":\"runtime.agent\",\"phase\":\"loop_start\"}")
+    while true {
+        turn_begin()
+        dispatch_parallel_tools()
+        turn_finalize()
+    }
+    return 0
+}
+
+fn turn_begin() -> i32 {
+    checkpoint()
+    return 0
+}
+
+fn dispatch_parallel_tools() -> i32 {
+    log.info("runtime.agent dispatching tools", "{\"component\":\"runtime.agent\",\"phase\":\"dispatch_parallel_tools\"}")
+    let turn_ctx = task.context()
+    services.tools.run_parallel()
+    let worker_a = spawn_ctx(worker.run, turn_ctx)
+    let worker_b = spawn_ctx(worker.run, turn_ctx)
+    detach(worker_a)
+    detach(worker_b)
+    task_result(worker_a)
+    task_result(worker_b)
+    checkpoint()
+    return 0
+}
+
+fn turn_finalize() -> i32 {
+    runtime.events.emit_tool_finished()
+    yield()
+    return 0
+}

@@ -1,0 +1,11 @@
+use core.time;
+
+fn boot_metrics() -> i32 {
+    time.now()
+    return 0
+}
+
+fn emit_turn_latency() -> i32 {
+    time.now()
+    return 0
+}

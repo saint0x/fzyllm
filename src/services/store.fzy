@@ -1,0 +1,8 @@
+use core.fs;
+
+fn init() -> i32 {
+    let handle = fs.open()
+    defer close(handle)
+    fs.flush()
+    return 0
+}

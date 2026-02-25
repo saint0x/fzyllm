@@ -1,0 +1,91 @@
+use core.fs;
+
+fn load_builtin() -> i32 {
+    fs.atomic_write()
+    register_tool()
+    return 0
+}
+
+fn register_tool() -> i32 {
+    fs.rename_atomic()
+    audit_register()
+    return 0
+}
+
+fn unregister_tool() -> i32 {
+    fs.rename_atomic()
+    audit_unregister()
+    return 0
+}
+
+fn update_tool() -> i32 {
+    fs.atomic_write()
+    audit_update()
+    return 0
+}
+
+fn get_tool() -> i32 {
+    fs.open()
+    return 0
+}
+
+fn list_tools() -> i32 {
+    fs.open()
+    return 0
+}
+
+fn refresh_runtime() -> i32 {
+    hot_reload()
+    fs.flush()
+    return 0
+}
+
+fn hot_reload() -> i32 {
+    fs.rename_atomic()
+    return 0
+}
+
+fn evict_stale() -> i32 {
+    fs.fsync()
+    audit_evict()
+    return 0
+}
+
+fn planner_hints() -> i32 {
+    metadata_contract()
+    return 1
+}
+
+fn metadata_contract() -> i32 {
+    return 0
+}
+
+fn heartbeat() -> i32 {
+    fs.flush()
+    return 0
+}
+
+fn record_invocation_decision() -> i32 {
+    fs.atomic_write()
+    return 0
+}
+
+fn audit_register() -> i32 {
+    fs.atomic_write()
+    return 0
+}
+
+fn audit_unregister() -> i32 {
+    fs.atomic_write()
+    return 0
+}
+
+fn audit_update() -> i32 {
+    fs.atomic_write()
+    return 0
+}
+
+fn audit_evict() -> i32 {
+    fs.atomic_write()
+    return 0
+}

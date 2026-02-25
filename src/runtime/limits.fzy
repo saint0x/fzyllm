@@ -1,0 +1,16 @@
+use core.proc;
+
+fn enforce_thread_limit() -> i32 {
+    process.exec_timeout(250)
+    return 0
+}
+
+fn enforce_queue_depth() -> i32 {
+    process.exec_timeout(250)
+    return 0
+}
+
+fn enforce_memory_budget() -> i32 {
+    process.exec_timeout(250)
+    return 0
+}

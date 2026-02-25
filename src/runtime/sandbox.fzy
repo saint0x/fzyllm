@@ -1,0 +1,16 @@
+use core.proc;
+
+fn apply_default_policy() -> i32 {
+    process.exec_timeout(120)
+    return 0
+}
+
+fn allow_tool_scope() -> i32 {
+    process.exec_timeout(120)
+    return 0
+}
+
+fn deny_tool_scope() -> i32 {
+    process.exec_timeout(120)
+    return 0
+}

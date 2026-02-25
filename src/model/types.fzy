@@ -1,0 +1,158 @@
+#[repr(C)]
+struct SessionRecord {
+    id: i32,
+    state: i32,
+}
+
+#[repr(C)]
+struct ToolRecord {
+    id: i32,
+    healthy: i32,
+}
+
+#[repr(C)]
+struct RunRecord {
+    id: i32,
+    state: i32,
+}
+
+enum SessionState {
+    SessionPending,
+    SessionActive,
+    SessionClosing,
+    SessionFailed,
+}
+
+enum ToolHealth {
+    ToolUnknown,
+    ToolHealthy,
+    ToolDegraded,
+    ToolOffline,
+}
+
+enum RunState {
+    RunQueued,
+    RunRunning,
+    RunCompleted,
+    RunFailed,
+}
+
+struct SessionView {
+    id: i32,
+    state: SessionState,
+}
+
+struct ToolView {
+    id: i32,
+    health: ToolHealth,
+}
+
+struct RunView {
+    id: i32,
+    state: RunState,
+}
+
+fn session_state_code(state: SessionState) -> i32 {
+    if state == SessionState::SessionPending {
+        return 0
+    }
+    if state == SessionState::SessionActive {
+        return 1
+    }
+    if state == SessionState::SessionClosing {
+        return 2
+    }
+    return 3
+}
+
+fn tool_health_code(health: ToolHealth) -> i32 {
+    if health == ToolHealth::ToolUnknown {
+        return 0
+    }
+    if health == ToolHealth::ToolHealthy {
+        return 1
+    }
+    if health == ToolHealth::ToolDegraded {
+        return 2
+    }
+    return 3
+}
+
+fn run_state_code(state: RunState) -> i32 {
+    if state == RunState::RunQueued {
+        return 0
+    }
+    if state == RunState::RunRunning {
+        return 1
+    }
+    if state == RunState::RunCompleted {
+        return 2
+    }
+    return 3
+}
+
+fn session_state_label(state: SessionState) -> str {
+    if state == SessionState::SessionPending {
+        return "pending"
+    }
+    if state == SessionState::SessionActive {
+        return "active"
+    }
+    if state == SessionState::SessionClosing {
+        return "closing"
+    }
+    return "failed"
+}
+
+fn run_state_label(state: RunState) -> str {
+    if state == RunState::RunQueued {
+        return "queued"
+    }
+    if state == RunState::RunRunning {
+        return "running"
+    }
+    if state == RunState::RunCompleted {
+        return "completed"
+    }
+    return "failed"
+}
+
+fn active_session_state_label() -> str {
+    return session_state_label(SessionState::SessionActive)
+}
+
+fn completed_run_state_label() -> str {
+    return run_state_label(RunState::RunCompleted)
+}
+
+fn session_view(id: i32, state: SessionState) -> SessionView {
+    return SessionView { id: id, state: state }
+}
+
+fn session_view_active(id: i32) -> SessionView {
+    return session_view(id, SessionState::SessionActive)
+}
+
+fn tool_view(id: i32, health: ToolHealth) -> ToolView {
+    return ToolView { id: id, health: health }
+}
+
+fn run_view(id: i32, state: RunState) -> RunView {
+    return RunView { id: id, state: state }
+}
+
+fn encode_session_record(view: SessionView) -> SessionRecord {
+    return SessionRecord { id: view.id, state: session_state_code(view.state) }
+}
+
+fn encode_tool_record(view: ToolView) -> ToolRecord {
+    return ToolRecord { id: view.id, healthy: tool_health_code(view.health) }
+}
+
+fn encode_run_record(view: RunView) -> RunRecord {
+    return RunRecord { id: view.id, state: run_state_code(view.state) }
+}
+
+fn schema_version() -> i32 {
+    return 3
+}

@@ -1,0 +1,24 @@
+use core.proc;
+
+fn apply_server_config() -> i32 {
+    load_host()
+    load_port()
+    load_workers()
+    process.exec_timeout(200)
+    return 0
+}
+
+fn load_host() -> i32 {
+    env.get("AGENT_HOST")
+    return 0
+}
+
+fn load_port() -> i32 {
+    env.get("AGENT_PORT")
+    return 0
+}
+
+fn load_workers() -> i32 {
+    env.get("AGENT_WORKERS")
+    return 0
+}
