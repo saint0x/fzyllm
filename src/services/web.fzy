@@ -38,12 +38,11 @@ fn start_listener() -> i32 {
 fn serve_forever() -> i32 {
     start_listener()
     log.info("web serve_forever entered", log.fields2("component", "web", "phase", "serve_forever"))
-    while true {
+    loop {
         accept_and_process()
         checkpoint()
         yield()
     }
-    return 0
 }
 
 fn accept_and_process() -> i32 {

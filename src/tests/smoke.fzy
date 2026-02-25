@@ -92,6 +92,15 @@ test "det_chaos_paths" {
 }
 
 test "det_language_surface" {
+    for i in 0..6 {
+        if i == 1 {
+            continue
+        }
+        if i == 4 {
+            break
+        }
+        pulse()
+    }
     let failure = runtime.failures.classify_timeout()
     let code = runtime.failures.failure_class_code(failure)
     match code {

@@ -1,0 +1,153 @@
+[
+  {
+    "t_virtual": 0,
+    "t_mono": 0,
+    "kind": "event",
+    "run_id": "054a500c-2997-42ab-ad86-b6daa3e4ae7c",
+    "seed": 4242,
+    "thread": "main",
+    "span_id": "e-0",
+    "tags": {
+      "name": "test:det_boot"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 1,
+    "kind": "event",
+    "run_id": "054a500c-2997-42ab-ad86-b6daa3e4ae7c",
+    "seed": 4242,
+    "thread": "main",
+    "span_id": "e-1",
+    "parent_span_id": "e-0",
+    "tags": {
+      "name": "test:det_registry"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 2,
+    "kind": "event",
+    "run_id": "054a500c-2997-42ab-ad86-b6daa3e4ae7c",
+    "seed": 4242,
+    "thread": "main",
+    "span_id": "e-2",
+    "parent_span_id": "e-1",
+    "tags": {
+      "name": "test:det_parallel_tools"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 3,
+    "kind": "event",
+    "run_id": "054a500c-2997-42ab-ad86-b6daa3e4ae7c",
+    "seed": 4242,
+    "thread": "main",
+    "span_id": "e-3",
+    "parent_span_id": "e-2",
+    "tags": {
+      "name": "test:det_http_routes"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 4,
+    "kind": "event",
+    "run_id": "054a500c-2997-42ab-ad86-b6daa3e4ae7c",
+    "seed": 4242,
+    "thread": "main",
+    "span_id": "e-4",
+    "parent_span_id": "e-3",
+    "tags": {
+      "name": "test:det_provider_and_streaming"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 5,
+    "kind": "event",
+    "run_id": "054a500c-2997-42ab-ad86-b6daa3e4ae7c",
+    "seed": 4242,
+    "thread": "main",
+    "span_id": "e-5",
+    "parent_span_id": "e-4",
+    "tags": {
+      "name": "test:det_security_and_openapi"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 6,
+    "kind": "event",
+    "run_id": "054a500c-2997-42ab-ad86-b6daa3e4ae7c",
+    "seed": 4242,
+    "thread": "main",
+    "span_id": "e-6",
+    "parent_span_id": "e-5",
+    "tags": {
+      "name": "test:det_recovery_and_failures"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 7,
+    "kind": "event",
+    "run_id": "054a500c-2997-42ab-ad86-b6daa3e4ae7c",
+    "seed": 4242,
+    "thread": "main",
+    "span_id": "e-7",
+    "parent_span_id": "e-6",
+    "tags": {
+      "name": "test:det_chaos_paths"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 8,
+    "kind": "event",
+    "run_id": "054a500c-2997-42ab-ad86-b6daa3e4ae7c",
+    "seed": 4242,
+    "thread": "main",
+    "span_id": "e-8",
+    "parent_span_id": "e-7",
+    "tags": {
+      "name": "test:det_language_surface"
+    },
+    "cost": {
+      "count": 1
+    }
+  }
+]

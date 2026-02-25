@@ -1,0 +1,56 @@
+[
+  {
+    "index": 0,
+    "time_ms": 0,
+    "name": "test:det_boot",
+    "fields": {}
+  },
+  {
+    "index": 1,
+    "time_ms": 0,
+    "name": "test:det_registry",
+    "fields": {}
+  },
+  {
+    "index": 2,
+    "time_ms": 0,
+    "name": "test:det_parallel_tools",
+    "fields": {}
+  },
+  {
+    "index": 3,
+    "time_ms": 0,
+    "name": "test:det_http_routes",
+    "fields": {}
+  },
+  {
+    "index": 4,
+    "time_ms": 0,
+    "name": "test:det_provider_and_streaming",
+    "fields": {}
+  },
+  {
+    "index": 5,
+    "time_ms": 0,
+    "name": "test:det_security_and_openapi",
+    "fields": {}
+  },
+  {
+    "index": 6,
+    "time_ms": 0,
+    "name": "test:det_recovery_and_failures",
+    "fields": {}
+  },
+  {
+    "index": 7,
+    "time_ms": 0,
+    "name": "test:det_chaos_paths",
+    "fields": {}
+  },
+  {
+    "index": 8,
+    "time_ms": 0,
+    "name": "test:det_language_surface",
+    "fields": {}
+  }
+]

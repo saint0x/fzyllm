@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "fozzylang.report.v0",
+  "status": "pass",
+  "capabilities": [
+    "thread"
+  ],
+  "scheduler": "fifo",
+  "seed": 42,
+  "discoveredTests": 9,
+  "deterministicTests": 9,
+  "executedTasks": 24,
+  "asyncCheckpoints": 36,
+  "rpcFrames": 0,
+  "generatedScenarios": 18,
+  "events": 72,
+  "failureClasses": [
+    {
+      "id": "async_schedule_interleaving",
+      "priority": 3,
+      "signal": "async.schedule"
+    },
+    {
+      "id": "thread_interleaving",
+      "priority": 4,
+      "signal": "thread.schedule"
+    }
+  ],
+  "findings": [],
+  "rpcValidation": [],
+  "threadFindings": []
+}

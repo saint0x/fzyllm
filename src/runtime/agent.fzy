@@ -2,12 +2,11 @@ use core.thread;
 
 fn run_loop() -> i32 {
     log.info("runtime.agent started", log.fields2("component", "runtime.agent", "phase", "loop_start"))
-    while true {
+    loop {
         turn_begin()
         dispatch_parallel_tools()
         turn_finalize()
     }
-    return 0
 }
 
 fn turn_begin() -> i32 {

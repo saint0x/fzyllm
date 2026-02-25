@@ -15,6 +15,7 @@ This repo demonstrates that fzy (fozzylang) can handle production-shaped service
 - Concurrency and scheduling primitives in a runtime context
 - Native `async`/`await` protocol paths for provider I/O orchestration
 - Explicit `match`-based state/failure mapping in runtime domain models
+- Production loop/control primitives (`loop`, `for-in` ranges, `break`, `continue`) in runtime/test paths
 - Deadline and cancellation markers (`timeout`, `deadline`, `cancel`) in request paths
 - Native HTTP/server flows and provider integration in language-level code
 - Structured logging and operational visibility from fzy (fozzylang) code paths

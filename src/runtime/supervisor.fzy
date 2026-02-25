@@ -16,9 +16,8 @@ fn begin_shutdown() -> i32 {
 
 fn run_forever() -> i32 {
     log.info("runtime.supervisor started", log.fields2("component", "runtime.supervisor", "phase", "loop_start"))
-    while true {
+    loop {
         runtime.events.emit_health_tick()
         process.exec_timeout(200)
     }
-    return 0
 }
