@@ -40,6 +40,32 @@ fn smoke_sonnet() -> i32 {
     return 0
 }
 
+async fn request_messages(payload: str) -> str {
+    let api_key = env.get("ANTHROPIC_API_KEY")
+    let endpoint = "https://api.anthropic.com/v1/messages"
+
+    await provider.anthropic_transport_async()
+    await provider.normalize_request_async()
+    await provider.translate_tool_calls_async()
+    await provider.stream_completion_async()
+
+    http.header("x-api-key", api_key)
+    http.header("anthropic-version", "2023-06-01")
+    http.header("content-type", "application/json")
+    let out = http.post_json_capture(endpoint, payload)
+
+    await provider.normalize_response_async()
+    return out
+}
+
+fn last_status() -> i32 {
+    return http.last_status()
+}
+
+fn last_error() -> str {
+    return http.last_error()
+}
+
 fn status_label(status: i32) -> str {
     if status >= 200 {
         return "ok"

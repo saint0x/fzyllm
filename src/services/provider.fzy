@@ -5,8 +5,21 @@ fn anthropic_transport() -> i32 {
     return 0
 }
 
+async fn anthropic_transport_async() -> i32 {
+    anthropic_transport()
+    checkpoint()
+    yield()
+    return 0
+}
+
 fn normalize_request() -> i32 {
     process.exec_timeout(100)
+    return 0
+}
+
+async fn normalize_request_async() -> i32 {
+    normalize_request()
+    checkpoint()
     return 0
 }
 
@@ -15,13 +28,31 @@ fn normalize_response() -> i32 {
     return 0
 }
 
+async fn normalize_response_async() -> i32 {
+    normalize_response()
+    checkpoint()
+    return 0
+}
+
 fn translate_tool_calls() -> i32 {
     process.exec_timeout(120)
     return 0
 }
 
+async fn translate_tool_calls_async() -> i32 {
+    translate_tool_calls()
+    checkpoint()
+    return 0
+}
+
 fn stream_completion() -> i32 {
     process.exec_timeout(220)
+    return 0
+}
+
+async fn stream_completion_async() -> i32 {
+    stream_completion()
+    checkpoint()
     return 0
 }
 

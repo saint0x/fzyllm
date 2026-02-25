@@ -146,7 +146,7 @@ fn handle_session_get(conn: i32) -> i32 {
     return 0
 }
 
-fn handle_messages(conn: i32) -> i32 {
+async fn handle_messages(conn: i32) -> i32 {
     log.info("http.handle_messages start", log.fields3("component", "http", "handler", "messages_post", "phase", "start"))
     post_session_messages()
     safety.filter_prompt()
@@ -192,8 +192,6 @@ fn handle_messages(conn: i32) -> i32 {
     process.wait(touch_handle, 2000)
     list.push(tool_logs, "touch $AGENT_WORKDIR/test_from_agent.txt")
 
-    let api_key = env.get("ANTHROPIC_API_KEY")
-    let endpoint = "https://api.anthropic.com/v1/messages"
     let system_prompt = "You are a local agent runtime with tool access. Answer directly first. Use tool outputs only when relevant."
     let tool_context = "Executed tools: ls, rg, touch on configured AGENT_WORKDIR."
     let user_context = str.concat4("USER_QUERY:\n", message, "\n\nTool outputs (optional context):\n", tool_context)
@@ -201,12 +199,9 @@ fn handle_messages(conn: i32) -> i32 {
     let messages = json.array1(user_msg)
     let payload = json.object4("model", json.str("claude-sonnet-4-6"), "max_tokens", json.raw("300"), "system", json.str(system_prompt), "messages", messages)
 
-    http.header("x-api-key", api_key)
-    http.header("anthropic-version", "2023-06-01")
-    http.header("content-type", "application/json")
-    let out = http.post_json_capture(endpoint, payload)
-    let status = http.last_status()
-    let transport_error = http.last_error()
+    let out = await anthropic.request_messages(payload)
+    let status = anthropic.last_status()
+    let transport_error = anthropic.last_error()
     log.info("http.handle_messages anthropic response", log.fields3("component", "http", "handler", "messages_post", "phase", "response"))
     let tool_logs_payload = json.from_list(tool_logs)
     let provider_payload = json.object3("provider", json.str("anthropic"), "response", json.raw(out), "tool_logs", json.raw(tool_logs_payload))
