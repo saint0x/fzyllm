@@ -14,7 +14,7 @@ mod chaos;
 mod safety;
 
 fn boot_all() -> i32 {
-    log.info("services.boot_all begin", "{\"component\":\"services\",\"phase\":\"boot_begin\"}")
+    log.info("services.boot_all begin", log.fields2("component", "services", "phase", "boot_begin"))
     store.init()
     web.boot()
     sessions.boot()
@@ -47,6 +47,6 @@ fn boot_all() -> i32 {
     chaos.inject_slow_tool()
     chaos.inject_malformed_payload()
     chaos.inject_provider_latency()
-    log.info("services.boot_all complete", "{\"component\":\"services\",\"phase\":\"boot_complete\"}")
+    log.info("services.boot_all complete", log.fields2("component", "services", "phase", "boot_complete"))
     return 0
 }

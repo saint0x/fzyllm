@@ -12,7 +12,7 @@ enum ProviderClass {
 }
 
 fn smoke_sonnet() -> i32 {
-    log.info("anthropic.smoke_sonnet start", "{\"component\":\"anthropic\",\"phase\":\"smoke_start\"}")
+    log.info("anthropic.smoke_sonnet start", log.fields2("component", "anthropic", "phase", "smoke_start"))
     let api_key = env.get("ANTHROPIC_API_KEY")
     let endpoint = "https://api.anthropic.com/v1/messages"
     let model = default_model_name()
@@ -31,12 +31,20 @@ fn smoke_sonnet() -> i32 {
     http.header("x-smoke-model", model)
     http.post_json_capture(endpoint, body)
     let status = http.last_status()
-    log.info("anthropic.smoke_sonnet response", "{\"component\":\"anthropic\",\"phase\":\"smoke_response\"}")
+    let status_text = status_label(status)
+    log.info("anthropic.smoke_sonnet response", log.fields3("component", "anthropic", "phase", "smoke_response", "status", status_text))
 
     provider.normalize_response()
     process.exec_timeout(8000)
     net.poll_next()
     return 0
+}
+
+fn status_label(status: i32) -> str {
+    if status >= 200 {
+        return "ok"
+    }
+    return "error"
 }
 
 fn default_model() -> i32 {

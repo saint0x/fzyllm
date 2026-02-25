@@ -1,7 +1,7 @@
 use core.thread;
 
 fn run() -> i32 {
-    log.info("runtime.server run invoked", "{\"component\":\"runtime.server\",\"phase\":\"run\"}")
+    log.info("runtime.server run invoked", log.fields2("component", "runtime.server", "phase", "run"))
     runtime.config.apply_server_config()
     checkpoint()
     services.web.serve_forever()

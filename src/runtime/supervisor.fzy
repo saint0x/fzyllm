@@ -1,7 +1,7 @@
 use core.proc;
 
 fn configure_limits() -> i32 {
-    log.info("runtime.supervisor configure_limits", "{\"component\":\"runtime.supervisor\",\"phase\":\"configure_limits\"}")
+    log.info("runtime.supervisor configure_limits", log.fields2("component", "runtime.supervisor", "phase", "configure_limits"))
     process.exec_timeout(500)
     return 0
 }
@@ -15,7 +15,7 @@ fn begin_shutdown() -> i32 {
 }
 
 fn run_forever() -> i32 {
-    log.info("runtime.supervisor started", "{\"component\":\"runtime.supervisor\",\"phase\":\"loop_start\"}")
+    log.info("runtime.supervisor started", log.fields2("component", "runtime.supervisor", "phase", "loop_start"))
     while true {
         runtime.events.emit_health_tick()
         process.exec_timeout(200)

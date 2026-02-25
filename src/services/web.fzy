@@ -15,7 +15,7 @@ enum RouteKind {
 }
 
 fn boot() -> i32 {
-    log.info("web.boot", "{\"component\":\"web\",\"phase\":\"boot\"}")
+    log.info("web.boot", log.fields2("component", "web", "phase", "boot"))
     configure_listener()
     return 0
 }
@@ -31,13 +31,13 @@ fn start_listener() -> i32 {
     configure_listener()
     let listener = try net.bind() catch net.bind()
     net.listen(listener)
-    log.info("web listener started", "{\"component\":\"web\",\"phase\":\"listener_started\"}")
+    log.info("web listener started", log.fields2("component", "web", "phase", "listener_started"))
     return 0
 }
 
 fn serve_forever() -> i32 {
     start_listener()
-    log.info("web serve_forever entered", "{\"component\":\"web\",\"phase\":\"serve_forever\"}")
+    log.info("web serve_forever entered", log.fields2("component", "web", "phase", "serve_forever"))
     while true {
         accept_and_process()
         checkpoint()
@@ -48,7 +48,7 @@ fn serve_forever() -> i32 {
 
 fn accept_and_process() -> i32 {
     let conn = try net.accept() catch net.accept()
-    log.info("web accepted connection", "{\"component\":\"web\",\"phase\":\"accept\"}")
+    log.info("web accepted connection", log.fields2("component", "web", "phase", "accept"))
     read_request(conn)
     apply_middleware(conn)
     dispatch(conn)
@@ -89,7 +89,7 @@ fn apply_middleware(conn: i32) -> i32 {
 fn dispatch(conn: i32) -> i32 {
     let route = route_kind(conn)
     let _route_id = route_key(conn)
-    log.info("web dispatch route", "{\"component\":\"web\",\"phase\":\"dispatch\"}")
+    log.info("web dispatch route", log.fields2("component", "web", "phase", "dispatch"))
     if route == RouteKind::RouteHealth {
         http.handle_health(conn)
     } else if route == RouteKind::RouteSessionsCreate {
@@ -109,7 +109,7 @@ fn dispatch(conn: i32) -> i32 {
     } else if route == RouteKind::RouteRunGet {
         http.handle_runs(conn)
     } else {
-        log.warn("web route not found", "{\"component\":\"web\",\"phase\":\"not_found\"}")
+        log.warn("web route not found", log.fields2("component", "web", "phase", "not_found"))
         write_not_found(conn)
     }
     return 0

@@ -9,7 +9,7 @@ enum ToolFailureClass {
 }
 
 fn boot_runner() -> i32 {
-    log.info("tools.boot_runner", "{\"component\":\"tools\",\"phase\":\"boot_runner\"}")
+    log.info("tools.boot_runner", log.fields2("component", "tools", "phase", "boot_runner"))
     init_tool_queue()
     let h = spawn_ctx(process_background, 200)
     detach(h)
@@ -55,7 +55,7 @@ fn kill_background() -> i32 {
 }
 
 fn run_parallel() -> i32 {
-    log.info("tools.run_parallel start", "{\"component\":\"tools\",\"phase\":\"run_parallel_start\"}")
+    log.info("tools.run_parallel start", log.fields2("component", "tools", "phase", "run_parallel_start"))
     runtime.events.emit_tool_started()
     enqueue_tool()
     enqueue_tool()
@@ -71,7 +71,7 @@ fn run_parallel() -> i32 {
     dequeue_tool()
     dequeue_tool()
     runtime.events.emit_tool_finished()
-    log.info("tools.run_parallel complete", "{\"component\":\"tools\",\"phase\":\"run_parallel_complete\"}")
+    log.info("tools.run_parallel complete", log.fields2("component", "tools", "phase", "run_parallel_complete"))
     return 0
 }
 
