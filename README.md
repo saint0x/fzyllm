@@ -1,12 +1,12 @@
 # fzyllm
 
-`fzyllm` is a small LLM runtime written in FozzyLang as a public exhibition project.
+`fzyllm` is a small LLM runtime written in fzy (fozzylang) as a public exhibition project.
 
-The point is not the app itself. The point is showing what FozzyLang feels like in a real, running system.
+The point is not the app itself. The point is showing what fzy (fozzylang) feels like in a real, running system.
 
 ## Why this project exists
 
-This repo demonstrates that FozzyLang can handle production-shaped service code with clean structure, deterministic tooling, and practical networking/runtime behavior.
+This repo demonstrates that fzy (fozzylang) can handle production-shaped service code with clean structure, deterministic tooling, and practical networking/runtime behavior.
 
 ## Language features demonstrated
 
@@ -14,7 +14,7 @@ This repo demonstrates that FozzyLang can handle production-shaped service code 
 - Type-safe function boundaries and explicit contracts between components
 - Concurrency and scheduling primitives in a runtime context
 - Native HTTP/server flows and provider integration in language-level code
-- Structured logging and operational visibility from FozzyLang code paths
+- Structured logging and operational visibility from fzy (fozzylang) code paths
 
 ## How the language maps to the runtime
 
@@ -40,4 +40,4 @@ Default listen address is `127.0.0.1:8787`.
 ## Notes
 
 - Secrets are env-driven (`ANTHROPIC_API_KEY`) and `.env` is gitignored.
-- This repo is intentionally small and focused: it is an exhibition of FozzyLang in action.
+- This repo is intentionally small and focused: it is an exhibition of fzy (fozzylang) in action.
