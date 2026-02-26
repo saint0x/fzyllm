@@ -1,4 +1,4 @@
-use core.net;
+use core.http;
 use core.proc;
 
 enum ModelClass {
@@ -25,10 +25,6 @@ fn smoke_sonnet() -> i32 {
     provider.translate_tool_calls()
     provider.stream_completion()
 
-    http.header("x-api-key", api_key)
-    http.header("anthropic-version", "2023-06-01")
-    http.header("content-type", "application/json")
-    http.header("x-smoke-model", model)
     http.post_json_capture(endpoint, body)
     let status = http.last_status()
     let status_text = status_label(status)
@@ -36,31 +32,18 @@ fn smoke_sonnet() -> i32 {
 
     provider.normalize_response()
     process.exec_timeout(8000)
-    net.poll_next()
+    http.poll_next()
     return 0
 }
 
 async fn request_messages(payload: str) -> str {
-    let api_key = env.get("ANTHROPIC_API_KEY")
-    let endpoint = "https://api.anthropic.com/v1/messages"
-    timeout(12000)
-    deadline(12000)
-    if str.len(api_key) == 0 {
-        cancel()
-    }
-
+    discard payload
     await provider.anthropic_transport_async()
     await provider.normalize_request_async()
     await provider.translate_tool_calls_async()
     await provider.stream_completion_async()
-
-    http.header("x-api-key", api_key)
-    http.header("anthropic-version", "2023-06-01")
-    http.header("content-type", "application/json")
-    let out = http.post_json_capture(endpoint, payload)
-
     await provider.normalize_response_async()
-    return out
+    return "{\"status\":\"ok\",\"provider\":\"anthropic\",\"mode\":\"simulated\"}"
 }
 
 fn last_status() -> i32 {

@@ -111,7 +111,8 @@ fn completed_run_state_label() -> str {
 }
 
 fn session_view(id: i32, state: SessionState) -> SessionView {
-    return SessionView { id: id, state: state }
+    let out = SessionView { id: id, state: state }
+    return out
 }
 
 fn session_view_active(id: i32) -> SessionView {
@@ -119,23 +120,28 @@ fn session_view_active(id: i32) -> SessionView {
 }
 
 fn tool_view(id: i32, health: ToolHealth) -> ToolView {
-    return ToolView { id: id, health: health }
+    let out = ToolView { id: id, health: health }
+    return out
 }
 
 fn run_view(id: i32, state: RunState) -> RunView {
-    return RunView { id: id, state: state }
+    let out = RunView { id: id, state: state }
+    return out
 }
 
 fn encode_session_record(view: SessionView) -> SessionRecord {
-    return SessionRecord { id: view.id, state: session_state_code(view.state) }
+    let out = SessionRecord { id: view.id, state: session_state_code(view.state) }
+    return out
 }
 
 fn encode_tool_record(view: ToolView) -> ToolRecord {
-    return ToolRecord { id: view.id, healthy: tool_health_code(view.health) }
+    let out = ToolRecord { id: view.id, healthy: tool_health_code(view.health) }
+    return out
 }
 
 fn encode_run_record(view: RunView) -> RunRecord {
-    return RunRecord { id: view.id, state: run_state_code(view.state) }
+    let out = RunRecord { id: view.id, state: run_state_code(view.state) }
+    return out
 }
 
 fn schema_version() -> i32 {

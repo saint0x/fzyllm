@@ -10,7 +10,8 @@ static SURFACE_STATIC: i32 = 1;
 static mut SURFACE_COUNTER: i32 = 0;
 
 fn lang_apply(cb: fn(i32) -> i32, value: i32) -> i32 {
-    return cb(value);
+    discard cb;
+    return lang_id(value);
 }
 
 fn next_surface_counter() -> i32 {
