@@ -12,6 +12,8 @@ mod openapi;
 mod persistence;
 mod chaos;
 mod safety;
+use registry.list_tools as list_tools_alias;
+pub use telemetry.boot_metrics;
 
 fn boot_all() -> i32 {
     log.info("services.boot_all begin", log.fields2("component", "services", "phase", "boot_begin"))

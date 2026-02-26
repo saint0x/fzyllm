@@ -1,114 +1,141 @@
+fn lang_id(v: i32) -> i32 {
+    return v;
+}
+
+const SURFACE_CONST: i32 = 2;
+static SURFACE_STATIC: i32 = 1;
+static mut SURFACE_COUNTER: i32 = 0;
+
+fn lang_apply(cb: fn(i32) -> i32, value: i32) -> i32 {
+    return cb(value);
+}
+
+fn next_surface_counter() -> i32 {
+    SURFACE_COUNTER += 1;
+    return SURFACE_COUNTER;
+}
+
 test "det_boot" {
-    model.state.init_all()
-    services.store.init()
-    runtime.events.boot_bus()
+    model.state.init_all();
+    services.store.init();
+    runtime.events.boot_bus();
 }
 
 test "det_registry" {
-    services.registry.load_builtin()
-    services.registry.register_tool()
-    services.registry.update_tool()
-    services.registry.list_tools()
-    services.registry.heartbeat()
-    services.registry.record_invocation_decision()
-    services.registry.unregister_tool()
-    services.registry.evict_stale()
+    services.registry.load_builtin();
+    services.registry.register_tool();
+    services.registry.update_tool();
+    services.registry.list_tools();
+    services.registry.heartbeat();
+    services.registry.record_invocation_decision();
+    services.registry.unregister_tool();
+    services.registry.evict_stale();
 }
 
 test "det_parallel_tools" {
-    services.tools.init_tool_queue()
-    services.tools.run_parallel()
-    services.tools.pipe_stdout_events()
-    services.tools.pipe_stderr_events()
-    services.tools.pipe_structured_events()
-    services.tools.retry_with_backoff()
-    runtime.agent.dispatch_parallel_tools()
+    services.tools.init_tool_queue();
+    services.tools.run_parallel();
+    services.tools.pipe_stdout_events();
+    services.tools.pipe_stderr_events();
+    services.tools.pipe_structured_events();
+    services.tools.retry_with_backoff();
+    runtime.agent.dispatch_parallel_tools();
 }
 
 test "det_http_routes" {
-    services.web.boot()
-    services.web.configure_listener()
-    services.web.start_listener()
-    services.web.parse_request_line()
-    services.web.parse_headers()
-    services.web.parse_body()
-    services.http.configure_server()
-    services.http.accept_once()
-    services.http.accept_and_dispatch()
-    services.http.post_sessions()
-    services.http.get_session()
-    services.http.post_session_messages()
-    services.http.get_tools()
-    services.http.post_tools()
-    services.http.delete_tool()
-    services.http.post_tool_run()
-    services.http.get_run()
-    services.http.route_sessions()
-    services.http.route_messages()
-    services.http.route_tools()
-    services.http.route_runs()
-    services.http.graceful_stop()
+    services.web.boot();
+    services.web.configure_listener();
+    services.web.start_listener();
+    services.web.parse_request_line();
+    services.web.parse_headers();
+    services.web.parse_body();
+    services.http.configure_server();
+    services.http.accept_once();
+    services.http.accept_and_dispatch();
+    services.http.post_sessions();
+    services.http.get_session();
+    services.http.post_session_messages();
+    services.http.get_tools();
+    services.http.post_tools();
+    services.http.delete_tool();
+    services.http.post_tool_run();
+    services.http.get_run();
+    services.http.route_sessions();
+    services.http.route_messages();
+    services.http.route_tools();
+    services.http.route_runs();
+    services.http.graceful_stop();
 }
 
 test "det_provider_and_streaming" {
-    services.provider.anthropic_transport()
-    services.provider.normalize_request()
-    services.provider.translate_tool_calls()
-    services.provider.stream_completion()
-    services.provider.normalize_response()
-    services.provider.map_provider_error()
+    services.provider.anthropic_transport();
+    services.provider.normalize_request();
+    services.provider.translate_tool_calls();
+    services.provider.stream_completion();
+    services.provider.normalize_response();
+    services.provider.map_provider_error();
 }
 
 test "det_security_and_openapi" {
-    services.security.auth_middleware()
-    services.security.rate_limit()
-    services.security.policy_filter()
-    services.safety.filter_prompt()
-    services.safety.filter_tool_response()
-    services.safety.decide_policy()
-    services.openapi.export_spec()
-    services.openapi.validate_schema()
+    services.security.auth_middleware();
+    services.security.rate_limit();
+    services.security.policy_filter();
+    services.safety.filter_prompt();
+    services.safety.filter_tool_response();
+    services.safety.decide_policy();
+    services.openapi.export_spec();
+    services.openapi.validate_schema();
 }
 
 test "det_recovery_and_failures" {
-    runtime.config.apply_server_config()
-    runtime.sandbox.apply_default_policy()
-    runtime.sandbox.allow_tool_scope()
-    runtime.sandbox.deny_tool_scope()
-    runtime.recovery.save_checkpoint()
-    runtime.recovery.restore_checkpoint()
-    runtime.recovery.recover_inflight_jobs()
-    runtime.failures.classify_spawn_failure()
-    runtime.failures.classify_timeout()
-    runtime.failures.classify_nonzero_exit()
-    runtime.failures.classify_malformed_output()
-    services.tools.classify_failure()
+    runtime.config.apply_server_config();
+    runtime.sandbox.apply_default_policy();
+    runtime.sandbox.allow_tool_scope();
+    runtime.sandbox.deny_tool_scope();
+    runtime.recovery.save_checkpoint();
+    runtime.recovery.restore_checkpoint();
+    runtime.recovery.recover_inflight_jobs();
+    runtime.failures.classify_spawn_failure();
+    runtime.failures.classify_timeout();
+    runtime.failures.classify_nonzero_exit();
+    runtime.failures.classify_malformed_output();
+    services.tools.classify_failure();
 }
 
 test "det_chaos_paths" {
-    services.chaos.inject_slow_tool()
-    services.chaos.inject_malformed_payload()
-    services.chaos.inject_provider_latency()
+    services.chaos.inject_slow_tool();
+    services.chaos.inject_malformed_payload();
+    services.chaos.inject_provider_latency();
 }
 
 test "det_language_surface" {
-    for i in 0..6 {
-        if i == 1 {
-            continue
-        }
-        if i == 4 {
-            break
-        }
-        pulse()
+    let code = runtime.failures.failure_class_code(runtime.failures.classify_timeout());
+    let mask: i32 = (~7) ^ 3;
+    let selected: fn(i32) -> i32 = lang_id;
+    let mut idx = 1;
+    idx += SURFACE_STATIC;
+    let values = [3, 5, 8 + SURFACE_CONST, 13];
+    let picked = values[idx];
+    let add = |x: i32| x + picked;
+    let applied = lang_apply(selected, 9);
+    let bumped = add(applied) + next_surface_counter();
+    let routed: i32 = mask % 5;
+    let ok: bool = !(routed == 0);
+    if ok {
+        pulse();
+    } else {
+        pulse();
     }
-    let failure = runtime.failures.classify_timeout()
-    let code = runtime.failures.failure_class_code(failure)
-    match code {
-        12 => pulse(),
-        _ => pulse(),
+    if code == 12 {
+        pulse();
+    } else {
+        pulse();
     }
-    model.types.session_state_code(model.types.SessionState::SessionActive)
-    model.types.run_state_code(model.types.RunState::RunCompleted)
-    timeout(5)
-    cancel()
+    if bumped > 0 {
+        pulse();
+    } else {
+        pulse();
+    }
+    timeout(5);
+    cancel();
 }

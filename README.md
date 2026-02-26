@@ -15,6 +15,9 @@ This repo demonstrates that fzy (fozzylang) can handle production-shaped service
 - Concurrency and scheduling primitives in a runtime context
 - Native `async`/`await` protocol paths for provider I/O orchestration
 - Explicit `match`-based state/failure mapping in runtime domain models
+- Closure/lambda values with lexical capture in deterministic language-surface tests
+- Native array/index expression paths exercised in deterministic language-surface tests
+- Import metadata surface demonstrated with `use ... as alias` and `pub use ...`
 - Production loop/control primitives (`loop`, `for-in` ranges, `break`, `continue`) in runtime/test paths
 - Deadline and cancellation markers (`timeout`, `deadline`, `cancel`) in request paths
 - Native HTTP/server flows and provider integration in language-level code
@@ -35,8 +38,11 @@ cp .env.example .env
 
 fz check
 fz build
-fz test
+fz test --det --seed 4242 --record artifacts/anthropic_smoke.det.trace.fozzy
 fz run
+fozzy trace verify artifacts/anthropic_smoke.det.trace.fozzy --strict --json
+fozzy replay artifacts/anthropic_smoke.det.trace.fozzy --json
+fozzy ci artifacts/anthropic_smoke.det.trace.fozzy --json
 ```
 
 Default listen address is `127.0.0.1:8787`.
