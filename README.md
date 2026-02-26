@@ -38,6 +38,7 @@ cp .env.example .env
 
 fz check
 fz build
+fz audit unsafe --workspace --json
 fz test --det --seed 4242 --record artifacts/anthropic_smoke.det.trace.fozzy
 fz run
 fozzy trace verify artifacts/anthropic_smoke.det.trace.fozzy --strict --json
@@ -50,4 +51,6 @@ Default listen address is `127.0.0.1:8787`.
 ## Notes
 
 - Secrets are env-driven (`ANTHROPIC_API_KEY`) and `.env` is gitignored.
+- Unsafe audit now emits unsafe inventory/docs artifacts under `.fz/` (JSON + Markdown + HTML).
+- Strict unsafe policy for CI is opt-in with `FZ_UNSAFE_STRICT=1`.
 - This repo is intentionally small and focused: it is an exhibition of fzy (fozzylang) in action.
