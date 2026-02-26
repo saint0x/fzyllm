@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "fozzy.profile_symbols.v1",
+  "runId": "3adc66f0-c0b9-4dbb-a170-c59ef8fbc551",
+  "modules": [
+    {
+      "name": "fozzy-runtime",
+      "buildId": "0.1.0-448e36d0c6a5",
+      "symbols": [
+        "test:det_boot",
+        "test:det_chaos_paths",
+        "test:det_http_routes",
+        "test:det_language_surface",
+        "test:det_parallel_tools",
+        "test:det_provider_and_streaming",
+        "test:det_recovery_and_failures",
+        "test:det_registry",
+        "test:det_security_and_openapi"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "fozzy.profile_latency.v1",
+  "runId": "4fd555b7-6624-4812-8063-c788f68b7686",
+  "distribution": {
+    "count": 0,
+    "p50Ms": 0,
+    "p95Ms": 0,
+    "p99Ms": 0,
+    "maxMs": 0,
+    "variance": 0.0
+  },
+  "criticalPath": [],
+  "waitReasons": []
+}

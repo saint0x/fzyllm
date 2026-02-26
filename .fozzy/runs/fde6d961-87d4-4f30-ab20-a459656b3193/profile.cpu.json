@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "fozzy.profile_cpu.v1",
+  "runId": "fde6d961-87d4-4f30-ab20-a459656b3193",
+  "collector": {
+    "domain": "host_time",
+    "primaryCollector": "perf_event_open",
+    "fallbackCollector": "in_process_sampler",
+    "hostTimeSemantics": "host-time CPU samples are not replay-deterministic; compare across repeated deterministic replays",
+    "linuxPerfEventOpen": false
+  },
+  "samplePeriodMs": 1,
+  "sampleCount": 1,
+  "samples": [
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::test:det_language_surface"
+      ],
+      "weightMs": 1
+    }
+  ],
+  "foldedStacks": [
+    {
+      "stack": "fozzy::runtime;event::test:det_language_surface",
+      "weight": 1
+    }
+  ],
+  "symbolsRef": "symbols.json"
+}

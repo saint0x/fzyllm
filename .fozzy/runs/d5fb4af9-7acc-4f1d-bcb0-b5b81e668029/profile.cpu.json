@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "fozzy.profile_cpu.v1",
+  "runId": "d5fb4af9-7acc-4f1d-bcb0-b5b81e668029",
+  "collector": {
+    "domain": "host_time",
+    "primaryCollector": "perf_event_open",
+    "fallbackCollector": "in_process_sampler",
+    "hostTimeSemantics": "host-time CPU samples are not replay-deterministic; compare across repeated deterministic replays",
+    "linuxPerfEventOpen": false
+  },
+  "samplePeriodMs": 1,
+  "sampleCount": 9,
+  "samples": [
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::test:det_boot"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::test:det_registry"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::test:det_parallel_tools"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::test:det_http_routes"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::test:det_provider_and_streaming"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::test:det_security_and_openapi"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::test:det_recovery_and_failures"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::test:det_chaos_paths"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::test:det_language_surface"
+      ],
+      "weightMs": 1
+    }
+  ],
+  "foldedStacks": [
+    {
+      "stack": "fozzy::runtime;event::test:det_boot",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::test:det_chaos_paths",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::test:det_http_routes",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::test:det_language_surface",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::test:det_parallel_tools",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::test:det_provider_and_streaming",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::test:det_recovery_and_failures",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::test:det_registry",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::test:det_security_and_openapi",
+      "weight": 1
+    }
+  ],
+  "symbolsRef": "symbols.json"
+}

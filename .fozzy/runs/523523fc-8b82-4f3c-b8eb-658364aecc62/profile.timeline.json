@@ -1,0 +1,17 @@
+[
+  {
+    "t_virtual": 0,
+    "t_mono": 0,
+    "kind": "event",
+    "run_id": "523523fc-8b82-4f3c-b8eb-658364aecc62",
+    "seed": 4242,
+    "thread": "main",
+    "span_id": "e-0",
+    "tags": {
+      "name": "test:det_language_surface"
+    },
+    "cost": {
+      "count": 1
+    }
+  }
+]

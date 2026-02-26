@@ -1,0 +1,24 @@
+{
+  "status": "pass",
+  "mode": "replay",
+  "identity": {
+    "runId": "d5fb4af9-7acc-4f1d-bcb0-b5b81e668029",
+    "seed": 4242,
+    "tracePath": "artifacts/anthropic_smoke.det.trace.fozzy",
+    "reportPath": ".fozzy/runs/d5fb4af9-7acc-4f1d-bcb0-b5b81e668029/report.json",
+    "artifactsDir": ".fozzy/runs/d5fb4af9-7acc-4f1d-bcb0-b5b81e668029"
+  },
+  "startedAt": "2026-02-26T22:03:32.666284Z",
+  "finishedAt": "2026-02-26T22:03:32.666473Z",
+  "durationMs": 1,
+  "durationNs": 170917,
+  "memory": {
+    "allocCount": 0,
+    "freeCount": 0,
+    "failedAllocCount": 0,
+    "inUseBytes": 0,
+    "peakBytes": 0,
+    "leakedBytes": 0,
+    "leakedAllocs": 0
+  }
+}

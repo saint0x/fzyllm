@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "fozzy.profile_symbols.v1",
+  "runId": "17eb1d1d-6dca-4234-bc4e-7b8d796f9946",
+  "modules": [
+    {
+      "name": "fozzy-runtime",
+      "buildId": "0.1.0-d0ff49f39214",
+      "symbols": [
+        "test:det_language_surface"
+      ]
+    }
+  ]
+}
