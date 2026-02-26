@@ -53,4 +53,5 @@ Default listen address is `127.0.0.1:8787`.
 - Secrets are env-driven (`ANTHROPIC_API_KEY`) and `.env` is gitignored.
 - Unsafe audit now emits unsafe inventory/docs artifacts under `.fz/` (JSON + Markdown + HTML).
 - Strict unsafe policy for CI is opt-in with `FZ_UNSAFE_STRICT=1`.
+- `src/tests/smoke.fzy` exercises first-class unsafe semantics in `det_language_surface` (`unsafe fn` + `unsafe { ... }`).
 - This repo is intentionally small and focused: it is an exhibition of fzy (fozzylang) in action.
