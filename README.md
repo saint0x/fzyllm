@@ -36,11 +36,14 @@ This repo demonstrates that fzy (fozzylang) can handle production-shaped service
 cp .env.example .env
 # set ANTHROPIC_API_KEY in .env
 
-fz check
-fz build
-fz audit unsafe --workspace --json
-fz test --det --seed 4242 --record artifacts/anthropic_smoke.det.trace.fozzy
-fz run
+fz check . --json
+fz build . --backend cranelift --json
+fz build . --release --backend llvm --json
+fz audit unsafe . --workspace --json
+fozzy doctor --deep --scenario .fz/det/main.det.fozzy.json --runs 5 --seed 4242 --json
+fozzy test --det --strict .fz/det/main.det.fozzy.json --json
+fz test . --det --strict-verify --seed 4242 --record artifacts/anthropic_smoke.det.trace.fozzy --json
+fz run . --backend cranelift --json
 fozzy trace verify artifacts/anthropic_smoke.det.trace.fozzy --strict --json
 fozzy replay artifacts/anthropic_smoke.det.trace.fozzy --json
 fozzy ci artifacts/anthropic_smoke.det.trace.fozzy --json
