@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "fozzy.profile_symbols.v1",
+  "runId": "3ac08f2a-d1c3-492d-923b-2e4484c68b6d",
+  "modules": [
+    {
+      "name": "fozzy-runtime",
+      "buildId": "0.1.0-029078f020d4",
+      "symbols": [
+        "capability:fs",
+        "capability:mem",
+        "capability:net",
+        "capability:proc",
+        "capability:thread",
+        "capability:time",
+        "http.request.anthropic.ok",
+        "http.request.anthropic.start",
+        "proc_spawn"
+      ]
+    }
+  ]
+}

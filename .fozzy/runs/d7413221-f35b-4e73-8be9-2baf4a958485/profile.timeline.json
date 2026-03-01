@@ -1,0 +1,17 @@
+[
+  {
+    "t_virtual": 0,
+    "t_mono": 0,
+    "kind": "event",
+    "run_id": "d7413221-f35b-4e73-8be9-2baf4a958485",
+    "seed": 15821453917999690654,
+    "thread": "main",
+    "span_id": "e-0",
+    "tags": {
+      "name": "test:det_parallel_tools"
+    },
+    "cost": {
+      "count": 1
+    }
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "fozzy.run_manifest.v1",
+  "runId": "43e23340-15de-4f9b-b327-8b883c7e8ed5",
+  "mode": "replay",
+  "status": "pass",
+  "seed": 4242,
+  "startedAt": "2026-03-01T15:49:26.863349Z",
+  "finishedAt": "2026-03-01T15:49:26.866342Z",
+  "durationMs": 3,
+  "durationNs": 2404459,
+  "tracePath": "artifacts/anthropic_smoke.det.trace.fozzy",
+  "reportPath": ".fozzy/runs/43e23340-15de-4f9b-b327-8b883c7e8ed5/report.json",
+  "artifactsDir": ".fozzy/runs/43e23340-15de-4f9b-b327-8b883c7e8ed5",
+  "findingsCount": 0,
+  "memoryLeakedBytes": 0,
+  "memoryLeakedAllocs": 0,
+  "memoryPeakBytes": 0
+}

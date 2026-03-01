@@ -1,8 +1,59 @@
+#[repr(C)]
+struct CreateSessionReq {
+    id: i32,
+}
+
+#[repr(C)]
+struct CreateSessionRes {
+    id: i32,
+    state: i32,
+}
+
+#[repr(C)]
+struct PostMessageReq {
+    session_id: i32,
+    message_id: i32,
+}
+
+#[repr(C)]
+struct PostMessageRes {
+    accepted: i32,
+}
+
+#[repr(C)]
+struct ListToolsReq {
+    scope: i32,
+}
+
+#[repr(C)]
+struct ListToolsRes {
+    count: i32,
+}
+
+#[repr(C)]
+struct RunToolReq {
+    tool_id: i32,
+}
+
+#[repr(C)]
+struct RunToolRes {
+    run_id: i32,
+    state: i32,
+}
+
 rpc CreateSession(req: CreateSessionReq) -> CreateSessionRes;
 rpc PostMessage(req: PostMessageReq) -> PostMessageRes;
 rpc ListTools(req: ListToolsReq) -> ListToolsRes;
 rpc RunTool(req: RunToolReq) -> RunToolRes;
 
 fn rpc_touch() -> i32 {
+    let _s_req = CreateSessionReq { id: 1 }
+    let _s_res = CreateSessionRes { id: 1, state: 1 }
+    let _m_req = PostMessageReq { session_id: 1, message_id: 1 }
+    let _m_res = PostMessageRes { accepted: 1 }
+    let _t_req = ListToolsReq { scope: 0 }
+    let _t_res = ListToolsRes { count: 3 }
+    let _r_req = RunToolReq { tool_id: 1 }
+    let _r_res = RunToolRes { run_id: 1, state: 2 }
     return 0
 }

@@ -14,7 +14,12 @@ fn get_session() -> i32 {
     return 0
 }
 
+fn get_session_json() -> str {
+    return persistence.load_session_json()
+}
+
 fn post_message() -> i32 {
     persistence.save_session()
+    telemetry.emit_turn_latency()
     return 0
 }

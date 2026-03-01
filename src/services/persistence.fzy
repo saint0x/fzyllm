@@ -1,16 +1,86 @@
 use core.fs;
 
+fn state_dir() -> str {
+    return "/tmp/anthropic_smoke"
+}
+
+fn sessions_path() -> str {
+    return "/tmp/anthropic_smoke/sessions.json"
+}
+
+fn runs_dir() -> str {
+    return "/tmp/anthropic_smoke/runs"
+}
+
+fn run_path(run_id: str) -> str {
+    if run_id == "latest" {
+        return "/tmp/anthropic_smoke/runs/latest.json"
+    }
+    if run_id == "parallel_bash_latest" {
+        return "/tmp/anthropic_smoke/runs/parallel_bash_latest.json"
+    }
+    if run_id == "parallel_grep_latest" {
+        return "/tmp/anthropic_smoke/runs/parallel_grep_latest.json"
+    }
+    if run_id == "bash_latest" {
+        return "/tmp/anthropic_smoke/runs/bash_latest.json"
+    }
+    return "/tmp/anthropic_smoke/runs/generic_latest.json"
+}
+
+fn ensure_state() -> i32 {
+    fs.mkdir(state_dir())
+    fs.mkdir(runs_dir())
+    return 0
+}
+
 fn save_session() -> i32 {
-    fs.atomic_write()
+    ensure_state()
+    let payload = util.json_obj3("status", json.str("ok"), "session_id", json.str("demo"), "state", json.str("active"))
+    fs.write_file(sessions_path(), payload)
     return 0
 }
 
 fn load_session() -> i32 {
-    fs.open()
+    ensure_state()
+    if fs.exists(sessions_path()) == 0 {
+        save_session()
+    }
     return 0
 }
 
+fn load_session_json() -> str {
+    load_session()
+    let payload = fs.read_file(sessions_path())
+    if payload == "" {
+        return util.json_obj2("status", json.str("ok"), "session_id", json.str("demo"))
+    }
+    return payload
+}
+
 fn save_tool_run() -> i32 {
-    fs.atomic_write()
+    ensure_state()
+    let payload = tools.last_run_json("all")
+    fs.write_file(run_path("latest"), payload)
     return 0
+}
+
+fn save_named_run(run_id: str, payload: str) -> i32 {
+    ensure_state()
+    fs.write_file(run_path(run_id), payload)
+    fs.write_file(run_path("latest"), payload)
+    return 0
+}
+
+fn load_run_json(run_id: str) -> str {
+    ensure_state()
+    let path = run_path(run_id)
+    if fs.exists(path) == 0 {
+        return util.json_obj3("status", json.str("error"), "run_id", json.str(run_id), "state", json.str("missing"))
+    }
+    let payload = fs.read_file(path)
+    if payload == "" {
+        return util.json_obj3("status", json.str("error"), "run_id", json.str(run_id), "state", json.str("empty"))
+    }
+    return payload
 }

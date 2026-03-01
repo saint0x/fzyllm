@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "fozzy.profile_cpu.v1",
+  "runId": "8ac582e6-3c91-4749-b261-0c9bea0ad63f",
+  "collector": {
+    "domain": "host_time",
+    "primaryCollector": "perf_event_open",
+    "fallbackCollector": "in_process_sampler",
+    "hostTimeSemantics": "host-time CPU samples are not replay-deterministic; compare across repeated deterministic replays",
+    "linuxPerfEventOpen": false
+  },
+  "samplePeriodMs": 1,
+  "sampleCount": 9,
+  "samples": [
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::capability:fs"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::capability:mem"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::capability:net"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::capability:proc"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::capability:thread"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::capability:time"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::http.request.anthropic.start"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::proc_spawn"
+      ],
+      "weightMs": 1
+    },
+    {
+      "thread": "main",
+      "stack": [
+        "fozzy::runtime",
+        "event::http.request.anthropic.ok"
+      ],
+      "weightMs": 1
+    }
+  ],
+  "foldedStacks": [
+    {
+      "stack": "fozzy::runtime;event::capability:fs",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::capability:mem",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::capability:net",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::capability:proc",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::capability:thread",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::capability:time",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::http.request.anthropic.ok",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::http.request.anthropic.start",
+      "weight": 1
+    },
+    {
+      "stack": "fozzy::runtime;event::proc_spawn",
+      "weight": 1
+    }
+  ],
+  "symbolsRef": "symbols.json"
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "fozzy.profile_metrics.v1",
+  "runId": "8ac582e6-3c91-4749-b261-0c9bea0ad63f",
+  "virtualTimeMs": 0,
+  "hostTimeMs": 1,
+  "cpuTimeMs": 9,
+  "allocBytes": 0,
+  "inUseBytes": 0,
+  "p50LatencyMs": 0,
+  "p95LatencyMs": 0,
+  "p99LatencyMs": 0,
+  "maxLatencyMs": 0,
+  "ioOps": 1,
+  "schedOps": 0,
+  "confidence": 0.8
+}

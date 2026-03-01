@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "fozzy.run_manifest.v1",
+  "runId": "55035d52-5f20-4eb0-9ebe-9c4778b13b45",
+  "mode": "replay",
+  "status": "pass",
+  "seed": 4181448437213816185,
+  "startedAt": "2026-02-27T19:08:38.849527Z",
+  "finishedAt": "2026-02-27T19:08:38.849583Z",
+  "durationMs": 1,
+  "durationNs": 51500,
+  "tracePath": "artifacts/anthropic_smoke.parallel.trace.fozzy",
+  "reportPath": ".fozzy/runs/55035d52-5f20-4eb0-9ebe-9c4778b13b45/report.json",
+  "artifactsDir": ".fozzy/runs/55035d52-5f20-4eb0-9ebe-9c4778b13b45",
+  "findingsCount": 0,
+  "memoryLeakedBytes": 0,
+  "memoryLeakedAllocs": 0,
+  "memoryPeakBytes": 0,
+  "profileCapabilities": [
+    "timeline",
+    "cpu",
+    "heap",
+    "latency",
+    "metrics",
+    "symbols"
+  ],
+  "profileArtifacts": {
+    "cpu": ".fozzy/runs/55035d52-5f20-4eb0-9ebe-9c4778b13b45/profile.cpu.json",
+    "heap": ".fozzy/runs/55035d52-5f20-4eb0-9ebe-9c4778b13b45/profile.heap.json",
+    "latency": ".fozzy/runs/55035d52-5f20-4eb0-9ebe-9c4778b13b45/profile.latency.json",
+    "metrics": ".fozzy/runs/55035d52-5f20-4eb0-9ebe-9c4778b13b45/profile.metrics.json",
+    "symbols": ".fozzy/runs/55035d52-5f20-4eb0-9ebe-9c4778b13b45/symbols.json",
+    "timeline": ".fozzy/runs/55035d52-5f20-4eb0-9ebe-9c4778b13b45/profile.timeline.json"
+  }
+}

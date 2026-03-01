@@ -14,11 +14,13 @@ This repo demonstrates that fzy (fozzylang) can handle production-shaped service
 - Type-safe function boundaries and explicit contracts between components
 - Concurrency and scheduling primitives in a runtime context
 - Native `async`/`await` protocol paths for provider I/O orchestration
+- Trait + generic polymorphism with explicit specialization and concrete impl dispatch
 - Explicit `match`-based state/failure mapping in runtime domain models
 - Closure/lambda values with lexical capture in deterministic language-surface tests
 - Native array/index expression paths exercised in deterministic language-surface tests
 - Import metadata surface demonstrated with `use ... as alias` and `pub use ...`
 - Production loop/control primitives (`loop`, `for-in` ranges, `break`, `continue`) in runtime/test paths
+- Full statement-as-expression surface (`if`, `match`, `loop`, `break <expr>`, `discard`) in deterministic language tests
 - Deadline and cancellation markers (`timeout`, `deadline`, `cancel`) in request paths
 - Native HTTP/server flows and provider integration in language-level code
 - Structured logging and operational visibility from fzy (fozzylang) code paths
@@ -57,4 +59,6 @@ Default listen address is `127.0.0.1:8787`.
 - Unsafe audit now emits unsafe inventory/docs artifacts under `.fz/` (JSON + Markdown + HTML).
 - Strict unsafe policy for CI is opt-in with `FZ_UNSAFE_STRICT=1`.
 - `src/tests/smoke.fzy` exercises first-class unsafe semantics in `det_language_surface` (`unsafe fn` + `unsafe { ... }`).
+- `src/tests/smoke.fzy` also exercises production trait/generic semantics (`trait`, concrete `impl`, `fn<T: ...>`, explicit specialization, and `Type.method(...)` dispatch).
+- Macro/attribute baseline used in this repo is constrained to supported attributes (`#[repr(...)]`, `#[ffi_panic(...)]` where applicable).
 - This repo is intentionally small and focused: it is an exhibition of fzy (fozzylang) in action.

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "fozzy.profile_symbols.v1",
+  "runId": "d7413221-f35b-4e73-8be9-2baf4a958485",
+  "modules": [
+    {
+      "name": "fozzy-runtime",
+      "buildId": "0.1.0-029078f020d4",
+      "symbols": [
+        "test:det_parallel_tools"
+      ]
+    }
+  ]
+}

@@ -1,16 +1,31 @@
 use core.proc;
+use core.fs;
+
+fn limits_path() -> str {
+    return "/tmp/anthropic_smoke/runtime.limits.json"
+}
 
 fn enforce_thread_limit() -> i32 {
-    process.exec_timeout(250)
+    fs.mkdir("/tmp/anthropic_smoke")
+    let v = env.get("AGENT_THREAD_LIMIT")
+    let payload = util.json_obj2("thread_limit", json.str(v), "status", json.str("ok"))
+    fs.write_file(limits_path(), payload)
+    proc.exec_timeout(250)
     return 0
 }
 
 fn enforce_queue_depth() -> i32 {
-    process.exec_timeout(250)
+    let v = env.get("AGENT_QUEUE_LIMIT")
+    let payload = util.json_obj2("queue_limit", json.str(v), "status", json.str("ok"))
+    fs.write_file(limits_path(), payload)
+    proc.exec_timeout(250)
     return 0
 }
 
 fn enforce_memory_budget() -> i32 {
-    process.exec_timeout(250)
+    let v = env.get("AGENT_MEMORY_LIMIT")
+    let payload = util.json_obj2("memory_limit", json.str(v), "status", json.str("ok"))
+    fs.write_file(limits_path(), payload)
+    proc.exec_timeout(250)
     return 0
 }

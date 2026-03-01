@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "fozzy.profile_heap.v1",
+  "runId": "2e8bb10b-db2f-4c85-81f3-47692f4f2298",
+  "totalAllocBytes": 0,
+  "inUseBytes": 0,
+  "allocRatePerSec": 0.0,
+  "hotspots": [],
+  "lifetimeHistogram": [],
+  "retentionSuspects": []
+}

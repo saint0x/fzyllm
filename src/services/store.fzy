@@ -1,8 +1,9 @@
 use core.fs;
 
 fn init() -> i32 {
-    let handle = fs.open()
-    defer close(handle)
+    fs.mkdir("/tmp/anthropic_smoke")
+    fs.mkdir("/tmp/anthropic_smoke/runs")
+    fs.mkdir("/tmp/anthropic_smoke/tools")
     fs.flush()
     return 0
 }

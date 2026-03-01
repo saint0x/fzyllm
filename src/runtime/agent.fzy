@@ -1,7 +1,8 @@
 use core.thread;
+use core.log;
 
 fn run_loop() -> i32 {
-    log.info("runtime.agent started", log.fields2("component", "runtime.agent", "phase", "loop_start"))
+    log.info("runtime.agent started", util.log_fields2("component", "runtime.agent", "phase", "loop_start"))
     loop {
         turn_begin()
         dispatch_parallel_tools()
@@ -15,15 +16,8 @@ fn turn_begin() -> i32 {
 }
 
 fn dispatch_parallel_tools() -> i32 {
-    log.info("runtime.agent dispatching tools", log.fields2("component", "runtime.agent", "phase", "dispatch_parallel_tools"))
-    let turn_ctx = task.context()
+    log.info("runtime.agent dispatching tools", util.log_fields2("component", "runtime.agent", "phase", "dispatch_parallel_tools"))
     services.tools.run_parallel()
-    let worker_a = spawn_ctx(worker.run, turn_ctx)
-    let worker_b = spawn_ctx(worker.run, turn_ctx)
-    detach(worker_a)
-    detach(worker_b)
-    task_result(worker_a)
-    task_result(worker_b)
     checkpoint()
     return 0
 }

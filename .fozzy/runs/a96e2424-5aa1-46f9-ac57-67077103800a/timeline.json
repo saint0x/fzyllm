@@ -1,0 +1,62 @@
+[
+  {
+    "index": 0,
+    "time_ms": 0,
+    "name": "capability:fs",
+    "fields": {}
+  },
+  {
+    "index": 1,
+    "time_ms": 0,
+    "name": "capability:mem",
+    "fields": {}
+  },
+  {
+    "index": 2,
+    "time_ms": 0,
+    "name": "capability:net",
+    "fields": {}
+  },
+  {
+    "index": 3,
+    "time_ms": 0,
+    "name": "capability:proc",
+    "fields": {}
+  },
+  {
+    "index": 4,
+    "time_ms": 0,
+    "name": "capability:thread",
+    "fields": {}
+  },
+  {
+    "index": 5,
+    "time_ms": 0,
+    "name": "capability:time",
+    "fields": {}
+  },
+  {
+    "index": 6,
+    "time_ms": 0,
+    "name": "http.request.anthropic.start",
+    "fields": {}
+  },
+  {
+    "index": 7,
+    "time_ms": 0,
+    "name": "proc_spawn",
+    "fields": {
+      "backend": "scripted",
+      "cmd": "python3",
+      "exit_code": 0,
+      "stderr": "",
+      "stdout": "{\"id\":\"deterministic.anthropic.stub\"}\n"
+    }
+  },
+  {
+    "index": 8,
+    "time_ms": 0,
+    "name": "http.request.anthropic.ok",
+    "fields": {}
+  }
+]

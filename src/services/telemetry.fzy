@@ -1,11 +1,23 @@
 use core.time;
+use core.fs;
+
+fn telemetry_path() -> str {
+    return "/tmp/anthropic_smoke/telemetry.last.json"
+}
 
 fn boot_metrics() -> i32 {
-    time.now()
+    fs.mkdir("/tmp/anthropic_smoke")
+    let now = time.now()
+    discard now
+    let payload = util.json_obj2("event", json.str("boot_metrics"), "status", json.str("ok"))
+    fs.write_file(telemetry_path(), payload)
     return 0
 }
 
 fn emit_turn_latency() -> i32 {
-    time.now()
+    let now = time.now()
+    discard now
+    let payload = util.json_obj2("event", json.str("emit_turn_latency"), "status", json.str("ok"))
+    fs.write_file(telemetry_path(), payload)
     return 0
 }

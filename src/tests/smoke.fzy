@@ -1,6 +1,35 @@
 fn lang_id(v: i32) -> i32 {
     return v;
 }
+
+trait LangScore {
+    fn score(v: i32) -> i32;
+}
+
+trait LangCode {
+    fn code(v: i32) -> i32;
+}
+
+struct LangProbe {
+    value: i32,
+}
+
+impl LangScore for LangProbe {
+    fn score(v: i32) -> i32 {
+        return v + 1;
+    }
+}
+
+impl LangCode for LangProbe {
+    fn code(v: i32) -> i32 {
+        return v + 2;
+    }
+}
+
+fn lang_keep<T: LangScore + LangCode>(v: T) -> T {
+    return v;
+}
+
 // Compiler generates unsafe contract metadata (reason/invariant/owner/scope/risk_class/proof_ref) for this site.
 unsafe fn lang_unsafe_id(v: i32) -> i32 {
     return v;
@@ -126,6 +155,19 @@ test "det_language_surface" {
     let applied = lang_apply(selected, 9);
     let bumped = add(applied) + next_surface_counter();
     let routed: i32 = mask % 5;
+    let class: i32 = match routed {
+        0 => 7,
+        1 => 11,
+        _ => 13,
+    };
+    let probe = LangProbe { value: 7 };
+    let kept = lang_keep<LangProbe>(probe);
+    discard kept;
+    let trait_score = LangProbe.score(7);
+    let trait_code = LangProbe.code(7);
+    discard loop {
+        break class;
+    };
     let ok: bool = !(routed == 0);
     // Compiler generates unsafe contract metadata (reason/invariant/owner/scope/risk_class/proof_ref) for this site.
     unsafe {
@@ -142,6 +184,16 @@ test "det_language_surface" {
         pulse();
     }
     if bumped > 0 {
+        pulse();
+    } else {
+        pulse();
+    }
+    if class > 0 {
+        pulse();
+    } else {
+        pulse();
+    }
+    if trait_score > 0 && trait_code > 0 {
         pulse();
     } else {
         pulse();

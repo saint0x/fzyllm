@@ -1,52 +1,95 @@
 use core.fs;
 
+fn registry_path() -> str {
+    return "/tmp/anthropic_smoke/registry.json"
+}
+
+fn audit_path() -> str {
+    return "/tmp/anthropic_smoke/registry.audit.log"
+}
+
+fn ensure_state_dir() -> i32 {
+    fs.mkdir("/tmp/anthropic_smoke")
+    return 0
+}
+
+fn builtin_tools_json() -> str {
+    let bash = util.json_obj4("id", json.str("bash"), "kind", json.str("process"), "health", json.str("ready"), "mode", json.str("single"))
+    let pbash = util.json_obj4("id", json.str("parallel_bash"), "kind", json.str("process"), "health", json.str("ready"), "mode", json.str("parallel"))
+    let pgrep = util.json_obj4("id", json.str("parallel_grep"), "kind", json.str("process"), "health", json.str("ready"), "mode", json.str("parallel"))
+    let tools = util.json_arr3(bash, pbash, pgrep)
+    return util.json_obj2("status", json.str("ok"), "tools", json.raw(tools))
+}
+
 fn load_builtin() -> i32 {
-    fs.atomic_write()
+    ensure_state_dir()
+    fs.write_file(registry_path(), builtin_tools_json())
+    record_audit("load_builtin")
     register_tool()
     return 0
 }
 
 fn register_tool() -> i32 {
-    fs.rename_atomic()
-    audit_register()
+    ensure_state_dir()
+    fs.write_file(registry_path(), builtin_tools_json())
+    record_audit("register_tool")
     return 0
 }
 
 fn unregister_tool() -> i32 {
-    fs.rename_atomic()
-    audit_unregister()
+    ensure_state_dir()
+    fs.write_file(registry_path(), builtin_tools_json())
+    record_audit("unregister_tool")
     return 0
 }
 
 fn update_tool() -> i32 {
-    fs.atomic_write()
-    audit_update()
+    ensure_state_dir()
+    fs.write_file(registry_path(), builtin_tools_json())
+    record_audit("update_tool")
     return 0
 }
 
 fn get_tool() -> i32 {
-    fs.open()
+    ensure_state_dir()
+    if fs.exists(registry_path()) == 0 {
+        fs.write_file(registry_path(), builtin_tools_json())
+    }
     return 0
 }
 
 fn list_tools() -> i32 {
-    fs.open()
+    ensure_state_dir()
+    if fs.exists(registry_path()) == 0 {
+        fs.write_file(registry_path(), builtin_tools_json())
+    }
     return 0
+}
+
+fn list_tools_json() -> str {
+    list_tools()
+    let payload = fs.read_file(registry_path())
+    if payload == "" {
+        return builtin_tools_json()
+    }
+    return payload
 }
 
 fn refresh_runtime() -> i32 {
     hot_reload()
     fs.flush()
+    record_audit("refresh_runtime")
     return 0
 }
 
 fn hot_reload() -> i32 {
-    fs.rename_atomic()
+    ensure_state_dir()
+    fs.write_file(registry_path(), list_tools_json())
     return 0
 }
 
 fn evict_stale() -> i32 {
-    fs.fsync()
+    fs.flush()
     audit_evict()
     return 0
 }
@@ -66,26 +109,33 @@ fn heartbeat() -> i32 {
 }
 
 fn record_invocation_decision() -> i32 {
-    fs.atomic_write()
+    record_audit("record_invocation_decision")
     return 0
 }
 
 fn audit_register() -> i32 {
-    fs.atomic_write()
+    record_audit("audit_register")
     return 0
 }
 
 fn audit_unregister() -> i32 {
-    fs.atomic_write()
+    record_audit("audit_unregister")
     return 0
 }
 
 fn audit_update() -> i32 {
-    fs.atomic_write()
+    record_audit("audit_update")
     return 0
 }
 
 fn audit_evict() -> i32 {
-    fs.atomic_write()
+    record_audit("audit_evict")
+    return 0
+}
+
+fn record_audit(event: str) -> i32 {
+    ensure_state_dir()
+    let line = util.json_obj2("event", json.str(event), "status", json.str("ok"))
+    fs.write_file(audit_path(), line)
     return 0
 }

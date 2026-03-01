@@ -1,5 +1,5 @@
 use core.http;
-use core.proc;
+use core.log;
 
 fn configure_server() -> i32 {
     env.get("AGENT_HOST")
@@ -9,7 +9,7 @@ fn configure_server() -> i32 {
 }
 
 fn start_server() -> i32 {
-    log.info("http.start_server", log.fields2("component", "http", "phase", "start_server"))
+    log.info("http.start_server", util.log_fields2("component", "http", "phase", "start_server"))
     web.start_listener()
     return 0
 }
@@ -125,104 +125,121 @@ fn resolve_workdir() -> str {
 }
 
 fn handle_sessions(conn: i32) -> i32 {
-    log.info("http.handle_sessions", log.fields2("component", "http", "handler", "sessions_create"))
+    log.info("http.handle_sessions", util.log_fields2("component", "http", "handler", "sessions_create"))
     post_sessions()
-    let body = json.object4("status", json.str("ok"), "event", json.str("session_created"), "session_id", json.str("demo"), "provider", json.str("anthropic"))
+    let session = sessions.get_session_json()
+    let body = util.json_obj3("status", json.str("ok"), "event", json.str("session_created"), "session", json.raw(session))
     http.write_json(conn, 200, body)
     return 0
 }
 
 fn handle_session_get(conn: i32) -> i32 {
-    log.info("http.handle_session_get", log.fields2("component", "http", "handler", "session_get"))
+    log.info("http.handle_session_get", util.log_fields2("component", "http", "handler", "session_get"))
     get_session()
     let session_id = http.param(conn, "id")
     let state = model.types.active_session_state_label()
-    let body = json.object4("status", json.str("ok"), "event", json.str("session_loaded"), "session_id", json.str(session_id), "state", json.str(state))
+    let details = sessions.get_session_json()
+    let body = util.json_obj4("status", json.str("ok"), "event", json.str("session_loaded"), "session_id", json.str(session_id), "details", json.raw(details))
+    if state == "active" {
+        checkpoint()
+    }
     http.write_json(conn, 200, body)
     return 0
 }
 
 async fn handle_messages(conn: i32) -> i32 {
-    log.info("http.handle_messages start", log.fields3("component", "http", "handler", "messages_post", "phase", "start"))
+    log.info("http.handle_messages start", util.log_fields3("component", "http", "handler", "messages_post", "phase", "start"))
     post_session_messages()
     safety.filter_prompt()
     safety.filter_tool_response()
     safety.decide_policy()
 
-    let session_id = "demo"
     let payload = "{\"model\":\"claude-sonnet-4-6\",\"max_tokens\":300,\"messages\":[{\"role\":\"user\",\"content\":\"runtime status\"}]}"
 
     let out = await anthropic.request_messages(payload)
     let status = anthropic.last_status()
     let transport_error = anthropic.last_error()
-    log.info("http.handle_messages anthropic response", log.fields3("component", "http", "handler", "messages_post", "phase", "response"))
-    let provider_payload = json.object2("provider", json.str("anthropic"), "response", json.str(out))
+    let provider_payload = util.json_obj2("provider", json.str("anthropic"), "response", json.str(out))
+
     if status >= 200 {
         if status < 300 {
-            log.info("http.handle_messages success", log.fields3("component", "http", "handler", "messages_post", "phase", "success"))
-            let body = json.object3("status", json.str("ok"), "session_id", json.str(session_id), "data", provider_payload)
+            let body = util.json_obj3("status", json.str("ok"), "session_id", json.str("demo"), "data", provider_payload)
             http.write_json(conn, 200, body)
         } else {
-            log.warn("http.handle_messages upstream_non_2xx", log.fields3("component", "http", "handler", "messages_post", "phase", "upstream_non_2xx"))
-            let body = json.object3("status", json.str("error"), "session_id", json.str(session_id), "data", provider_payload)
+            let body = util.json_obj3("status", json.str("error"), "session_id", json.str("demo"), "data", provider_payload)
             http.write_json(conn, 502, body)
         }
     } else {
-        log.error("http.handle_messages invalid_status", log.fields3("component", "http", "handler", "messages_post", "phase", "invalid_status"))
-        let body = json.object4("status", json.str("error"), "message", json.str("anthropic_invalid_status"), "raw_response", json.str(out), "transport_error", json.str(transport_error))
+        let body = util.json_obj4("status", json.str("error"), "message", json.str("anthropic_invalid_status"), "raw_response", json.str(out), "transport_error", json.str(transport_error))
         http.write_json(conn, 502, body)
     }
     return 0
 }
 
 fn handle_tools_register(conn: i32) -> i32 {
-    log.info("http.handle_tools_register", log.fields2("component", "http", "handler", "tools_register"))
+    log.info("http.handle_tools_register", util.log_fields2("component", "http", "handler", "tools_register"))
     post_tools()
-    let body = json.object4("status", json.str("ok"), "event", json.str("tool_registered"), "tool_id", json.str("desktop_grep"), "exec_mode", json.str("background"))
+    let body = util.json_obj3("status", json.str("ok"), "event", json.str("tool_registered"), "tools", json.raw(registry.list_tools_json()))
     http.write_json(conn, 200, body)
     return 0
 }
 
 fn handle_tools_list(conn: i32) -> i32 {
-    log.info("http.handle_tools_list", log.fields2("component", "http", "handler", "tools_list"))
+    log.info("http.handle_tools_list", util.log_fields2("component", "http", "handler", "tools_list"))
     get_tools()
-    let body = "{\"status\":\"ok\",\"tools\":[{\"id\":\"desktop_grep\",\"kind\":\"process\",\"health\":\"ready\"}]}"
-    http.write_json(conn, 200, body)
+    http.write_json(conn, 200, registry.list_tools_json())
     return 0
 }
 
 fn handle_tools_delete(conn: i32) -> i32 {
-    log.info("http.handle_tools_delete", log.fields2("component", "http", "handler", "tools_delete"))
+    log.info("http.handle_tools_delete", util.log_fields2("component", "http", "handler", "tools_delete"))
     delete_tool()
     let tool_id = http.param(conn, "id")
-    let body = json.object3("status", json.str("ok"), "event", json.str("tool_deleted"), "tool_id", json.str(tool_id))
+    let body = util.json_obj3("status", json.str("ok"), "event", json.str("tool_deleted"), "tool_id", json.str(tool_id))
     http.write_json(conn, 200, body)
     return 0
 }
 
 fn handle_tools_run(conn: i32) -> i32 {
-    log.info("http.handle_tools_run start", log.fields3("component", "http", "handler", "tools_run", "phase", "start"))
-    post_tool_run()
+    log.info("http.handle_tools_run start", util.log_fields3("component", "http", "handler", "tools_run", "phase", "start"))
+    security.auth_middleware()
+    security.rate_limit()
     let tool_id = http.param(conn, "id")
-    let body = json.object4("status", json.str("ok"), "tool_id", json.str(tool_id), "result", json.str("tool_simulated"), "run_id", json.str(tool_id))
+    discard tools.run_named(tool_id)
+    let run_id = run_id_for_tool(tool_id)
+    let result = tools.last_run_json(tool_id)
+    let body = util.json_obj4("status", json.str("ok"), "tool_id", json.str(tool_id), "run_id", json.str(run_id), "result", json.raw(result))
+    persistence.save_named_run(run_id, body)
     http.write_json(conn, 200, body)
     return 0
 }
 
+fn run_id_for_tool(tool_id: str) -> str {
+    if tool_id == "parallel_bash" {
+        return "parallel_bash_latest"
+    }
+    if tool_id == "parallel_grep" {
+        return "parallel_grep_latest"
+    }
+    if tool_id == "bash" {
+        return "bash_latest"
+    }
+    return "latest"
+}
+
 fn handle_runs(conn: i32) -> i32 {
-    log.info("http.handle_runs", log.fields2("component", "http", "handler", "runs_get"))
+    log.info("http.handle_runs", util.log_fields2("component", "http", "handler", "runs_get"))
     get_run()
     let run_id = http.param(conn, "id")
-    let run_state = model.types.completed_run_state_label()
-    let body = json.object4("status", json.str("ok"), "run_id", json.str(run_id), "state", json.str(run_state), "tool_id", json.str("desktop_grep"))
-    http.write_json(conn, 200, body)
+    let payload = persistence.load_run_json(run_id)
+    http.write_json(conn, 200, payload)
     return 0
 }
 
 fn handle_health(conn: i32) -> i32 {
-    log.info("http.handle_health", log.fields2("component", "http", "handler", "health"))
+    log.info("http.handle_health", util.log_fields2("component", "http", "handler", "health"))
     let model_name = anthropic.default_model_name()
-    let body = json.object4("status", json.str("ok"), "service", json.str("agent_runtime"), "provider", json.str("anthropic"), "model", json.str(model_name))
+    let body = util.json_obj4("status", json.str("ok"), "service", json.str("agent_runtime"), "provider", json.str("anthropic"), "model", json.str(model_name))
     http.write_json(conn, 200, body)
     return 0
 }

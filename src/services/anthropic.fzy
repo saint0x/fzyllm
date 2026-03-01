@@ -1,5 +1,6 @@
 use core.http;
 use core.proc;
+use core.log;
 
 enum ModelClass {
     ClaudeSonnet46,
@@ -11,39 +12,50 @@ enum ProviderClass {
     AnthropicFallback,
 }
 
+fn env_or(key: str, fallback: str) -> str {
+    let v = env.get(key)
+    if v == "" {
+        return fallback
+    }
+    return v
+}
+
+fn endpoint() -> str {
+    return env_or("ANTHROPIC_ENDPOINT", "https://api.anthropic.com/v1/messages")
+}
+
 fn smoke_sonnet() -> i32 {
-    log.info("anthropic.smoke_sonnet start", log.fields2("component", "anthropic", "phase", "smoke_start"))
-    let api_key = env.get("ANTHROPIC_API_KEY")
-    let endpoint = "https://api.anthropic.com/v1/messages"
+    log.info("anthropic.smoke_sonnet start", util.log_fields2("component", "anthropic", "phase", "smoke_start"))
     let model = default_model_name()
-    let message = json.object2("role", json.str("user"), "content", json.str("Give a short agent runtime status update"))
-    let messages = json.array1(message)
-    let body = json.object3("model", json.str(model), "max_tokens", json.raw("128"), "messages", messages)
+    let message = util.json_obj2("role", json.str("user"), "content", json.str("Give a short agent runtime status update"))
+    let messages = util.json_arr1(message)
+    let body = util.json_obj3("model", json.str(model), "max_tokens", json.raw("128"), "messages", messages)
 
     provider.anthropic_transport()
     provider.normalize_request()
     provider.translate_tool_calls()
     provider.stream_completion()
 
-    http.post_json_capture(endpoint, body)
+    http.post_json_capture(endpoint(), body)
     let status = http.last_status()
     let status_text = status_label(status)
-    log.info("anthropic.smoke_sonnet response", log.fields3("component", "anthropic", "phase", "smoke_response", "status", status_text))
+    log.info("anthropic.smoke_sonnet response", util.log_fields3("component", "anthropic", "phase", "smoke_response", "status", status_text))
 
     provider.normalize_response()
-    process.exec_timeout(8000)
+    proc.exec_timeout(8000)
     http.poll_next()
-    return 0
+    return status
 }
 
 async fn request_messages(payload: str) -> str {
-    discard payload
     await provider.anthropic_transport_async()
     await provider.normalize_request_async()
     await provider.translate_tool_calls_async()
     await provider.stream_completion_async()
+
+    let out = http.post_json_capture(endpoint(), payload)
     await provider.normalize_response_async()
-    return "{\"status\":\"ok\",\"provider\":\"anthropic\",\"mode\":\"simulated\"}"
+    return out
 }
 
 fn last_status() -> i32 {
@@ -56,9 +68,12 @@ fn last_error() -> str {
 
 fn status_label(status: i32) -> str {
     if status >= 200 {
-        return "ok"
+        if status < 300 {
+            return "ok"
+        }
+        return "upstream_error"
     }
-    return "error"
+    return "transport_error"
 }
 
 fn default_model() -> i32 {
@@ -90,7 +105,7 @@ fn model_name(model: ModelClass) -> str {
 fn provider_fallback() -> i32 {
     provider_class_code(resolve_provider(1))
     provider.map_provider_error()
-    process.exec_timeout(400)
+    proc.exec_timeout(400)
     return 0
 }
 

@@ -1,5 +1,7 @@
 use core.proc;
+use core.fs;
 use core.thread;
+use core.log;
 
 enum ToolFailureClass {
     ToolSpawnFailure,
@@ -8,76 +10,298 @@ enum ToolFailureClass {
     ToolMalformedOutput,
 }
 
+fn state_dir() -> str {
+    return "/tmp/anthropic_smoke"
+}
+
+fn tools_dir() -> str {
+    return "/tmp/anthropic_smoke/tools"
+}
+
+fn runs_dir() -> str {
+    return "/tmp/anthropic_smoke/runs"
+}
+
+fn last_parallel_path() -> str {
+    return "/tmp/anthropic_smoke/runs/parallel.last.json"
+}
+
+fn bash_a_path() -> str {
+    return "/tmp/anthropic_smoke/tools/parallel_bash_a.json"
+}
+
+fn bash_b_path() -> str {
+    return "/tmp/anthropic_smoke/tools/parallel_bash_b.json"
+}
+
+fn grep_a_path() -> str {
+    return "/tmp/anthropic_smoke/tools/parallel_grep_a.json"
+}
+
+fn grep_b_path() -> str {
+    return "/tmp/anthropic_smoke/tools/parallel_grep_b.json"
+}
+
+fn last_run_path_for(tool_id: str) -> str {
+    if tool_id == "parallel_bash" {
+        return "/tmp/anthropic_smoke/runs/parallel_bash.json"
+    }
+    if tool_id == "parallel_grep" {
+        return "/tmp/anthropic_smoke/runs/parallel_grep.json"
+    }
+    if tool_id == "bash" {
+        return "/tmp/anthropic_smoke/runs/bash.json"
+    }
+    if tool_id == "timeout_probe" {
+        return "/tmp/anthropic_smoke/runs/timeout_probe.json"
+    }
+    return "/tmp/anthropic_smoke/runs/generic.json"
+}
+
+fn ensure_dirs() -> i32 {
+    fs.mkdir(state_dir())
+    fs.mkdir(tools_dir())
+    fs.mkdir(runs_dir())
+    return 0
+}
+
+fn env_or(key: str, fallback: str) -> str {
+    let value = env.get(key)
+    if value == "" {
+        return fallback
+    }
+    return value
+}
+
+fn safe_read(path: str) -> str {
+    if fs.exists(path) == 0 {
+        return "{}"
+    }
+    let value = fs.read_file(path)
+    if value == "" {
+        return "{}"
+    }
+    return value
+}
+
+fn status_from_exit_code(code: i32) -> str {
+    if code == 0 {
+        return "ok"
+    }
+    if code == -124 {
+        return "timeout"
+    }
+    if code == -2 {
+        return "running"
+    }
+    return "failed"
+}
+
+fn default_proc_env() -> i32 {
+    let env_map = proc.env_new()
+    discard proc.env_set(env_map, "TERM", "dumb")
+    return env_map
+}
+
+fn run_shell_to_file(tool_id: str, command: str, timeout_ms: i32, out_path: str) -> i32 {
+    proc.exec_timeout(timeout_ms)
+    let argv = proc.argv_new()
+    discard proc.argv_push(argv, "-lc")
+    discard proc.argv_push(argv, command)
+    let env_map = default_proc_env()
+    let handle = proc.run_cmd("/bin/sh", argv, env_map, "")
+    if handle < 0 {
+        let fail = util.json_obj3("tool", json.str(tool_id), "status", json.str("spawn_failure"), "command", json.str(command))
+        fs.write_file(out_path, fail)
+        return -1
+    }
+
+    let stdout = proc.stdout(handle)
+    let stderr = proc.stderr(handle)
+    let exit_code = proc.exit_code(handle)
+    let status = status_from_exit_code(exit_code)
+    let streams = util.json_obj2("stdout", json.str(stdout), "stderr", json.str(stderr))
+    let payload = util.json_obj4("tool", json.str(tool_id), "status", json.str(status), "command", json.str(command), "streams", json.raw(streams))
+    fs.write_file(out_path, payload)
+    return 0
+}
+
+fn run_grep_to_file(tool_id: str, pattern: str, target: str, timeout_ms: i32, out_path: str) -> i32 {
+    proc.exec_timeout(timeout_ms)
+    let argv = proc.argv_new()
+    discard proc.argv_push(argv, "-R")
+    discard proc.argv_push(argv, "--line-number")
+    discard proc.argv_push(argv, pattern)
+    discard proc.argv_push(argv, target)
+    let env_map = default_proc_env()
+    let handle = proc.run_cmd("grep", argv, env_map, "")
+    if handle < 0 {
+        let fail = util.json_obj3("tool", json.str(tool_id), "status", json.str("spawn_failure"), "target", json.str(target))
+        fs.write_file(out_path, fail)
+        return -1
+    }
+
+    let stdout = proc.stdout(handle)
+    let stderr = proc.stderr(handle)
+    let exit_code = proc.exit_code(handle)
+    let status = status_from_exit_code(exit_code)
+    let streams = util.json_obj2("stdout", json.str(stdout), "stderr", json.str(stderr))
+    let meta = util.json_obj2("pattern", json.str(pattern), "target", json.str(target))
+    let payload = util.json_obj4("tool", json.str(tool_id), "status", json.str(status), "meta", json.raw(meta), "streams", json.raw(streams))
+    fs.write_file(out_path, payload)
+    return 0
+}
+
+fn run_parallel_bash_slot_a() -> i32 {
+    let cmd = env_or("TOOL_BASH_A", "echo parallel-bash-A")
+    return run_shell_to_file("parallel_bash_a", cmd, 4000, bash_a_path())
+}
+
+fn run_parallel_bash_slot_b() -> i32 {
+    let cmd = env_or("TOOL_BASH_B", "echo parallel-bash-B")
+    return run_shell_to_file("parallel_bash_b", cmd, 4000, bash_b_path())
+}
+
+fn run_parallel_grep_slot_a() -> i32 {
+    let pattern = env_or("TOOL_GREP_PATTERN_A", "fn ")
+    let target = env_or("TOOL_GREP_TARGET_A", "src")
+    return run_grep_to_file("parallel_grep_a", pattern, target, 5000, grep_a_path())
+}
+
+fn run_parallel_grep_slot_b() -> i32 {
+    let pattern = env_or("TOOL_GREP_PATTERN_B", "use ")
+    let target = env_or("TOOL_GREP_TARGET_B", "src")
+    return run_grep_to_file("parallel_grep_b", pattern, target, 5000, grep_b_path())
+}
+
+fn assemble_pair(path_a: str, path_b: str) -> str {
+    let left = safe_read(path_a)
+    let right = safe_read(path_b)
+    return util.json_obj2("left", json.raw(left), "right", json.raw(right))
+}
+
 fn boot_runner() -> i32 {
-    log.info("tools.boot_runner", log.fields2("component", "tools", "phase", "boot_runner"))
-    init_tool_queue()
-    let h = spawn_ctx(process_background, 200)
-    detach(h)
+    ensure_dirs()
     return 0
 }
 
 fn init_tool_queue() -> i32 {
-    enforce_global_queue()
+    ensure_dirs()
     return 0
 }
 
 fn enqueue_tool() -> i32 {
-    process.exec_timeout(120)
+    checkpoint()
     return 0
 }
 
 fn dequeue_tool() -> i32 {
-    process.exec_timeout(120)
+    checkpoint()
     return 0
 }
 
 fn process_background() -> i32 {
-    spawn_background()
-    monitor_background()
-    process.exec_timeout(1000)
     checkpoint()
     return 0
 }
 
 fn spawn_background() -> i32 {
-    process.exec_timeout(150)
+    checkpoint()
     return 0
 }
 
 fn monitor_background() -> i32 {
-    process.exec_timeout(150)
+    checkpoint()
     return 0
 }
 
 fn kill_background() -> i32 {
-    process.exit_class()
+    return proc.exit_class()
+}
+
+fn run_parallel_bash() -> i32 {
+    runtime.events.emit_tool_started()
+    ensure_dirs()
+    let group = task.group_begin()
+    discard task.group_spawn(group, run_parallel_bash_slot_a)
+    discard task.group_spawn(group, run_parallel_bash_slot_b)
+    discard task.group_join_all(group)
+    discard task.group_cancel(group)
+    let payload = assemble_pair(bash_a_path(), bash_b_path())
+    fs.write_file(last_run_path_for("parallel_bash"), payload)
+    runtime.events.emit_tool_finished()
     return 0
+}
+
+fn run_parallel_grep() -> i32 {
+    runtime.events.emit_tool_started()
+    ensure_dirs()
+    let group = task.group_begin()
+    discard task.group_spawn(group, run_parallel_grep_slot_a)
+    discard task.group_spawn(group, run_parallel_grep_slot_b)
+    discard task.group_join_all(group)
+    discard task.group_cancel(group)
+    let payload = assemble_pair(grep_a_path(), grep_b_path())
+    fs.write_file(last_run_path_for("parallel_grep"), payload)
+    runtime.events.emit_tool_finished()
+    return 0
+}
+
+fn run_parallel_bash_worker() -> i32 {
+    return run_parallel_bash()
+}
+
+fn run_parallel_grep_worker() -> i32 {
+    return run_parallel_grep()
 }
 
 fn run_parallel() -> i32 {
-    log.info("tools.run_parallel start", log.fields2("component", "tools", "phase", "run_parallel_start"))
+    log.info("tools.run_parallel start", util.log_fields2("component", "tools", "phase", "run_parallel_start"))
     runtime.events.emit_tool_started()
+    ensure_dirs()
     enqueue_tool()
     enqueue_tool()
-    enforce_global_queue()
+
     let group = task.group_begin()
-    let h1 = task.group_spawn(group, process_background)
-    let h2 = task.group_spawn(group, process_background)
-    task_result(h1)
-    task_result(h2)
-    detach(h1)
-    detach(h2)
-    task.group_cancel(group)
+    discard task.group_spawn(group, run_parallel_bash_worker)
+    discard task.group_spawn(group, run_parallel_grep_worker)
+    discard task.group_join_all(group)
+    discard task.group_cancel(group)
+
     dequeue_tool()
     dequeue_tool()
+
+    let bash_result = safe_read(last_run_path_for("parallel_bash"))
+    let grep_result = safe_read(last_run_path_for("parallel_grep"))
+    let combined = util.json_obj2("parallel_bash", json.raw(bash_result), "parallel_grep", json.raw(grep_result))
+    fs.write_file(last_parallel_path(), combined)
     runtime.events.emit_tool_finished()
-    log.info("tools.run_parallel complete", log.fields2("component", "tools", "phase", "run_parallel_complete"))
+    log.info("tools.run_parallel complete", util.log_fields2("component", "tools", "phase", "run_parallel_complete"))
     return 0
 }
 
-fn enforce_global_queue() -> i32 {
-    process.exec_timeout(150)
-    return 0
+fn run_named(tool_id: str) -> i32 {
+    if tool_id == "parallel_bash" {
+        return run_parallel_bash()
+    }
+    if tool_id == "parallel_grep" {
+        return run_parallel_grep()
+    }
+    if tool_id == "bash" {
+        let cmd = env_or("TOOL_BASH", "echo bash-tool-default")
+        return run_shell_to_file("bash", cmd, 4000, last_run_path_for("bash"))
+    }
+    if tool_id == "desktop_grep" {
+        return run_parallel_grep()
+    }
+    return run_parallel()
+}
+
+fn last_run_json(tool_id: str) -> str {
+    if tool_id == "all" {
+        return safe_read(last_parallel_path())
+    }
+    return safe_read(last_run_path_for(tool_id))
 }
 
 fn pipe_stdout_events() -> i32 {
@@ -96,19 +320,20 @@ fn pipe_structured_events() -> i32 {
 }
 
 fn run_with_timeout() -> i32 {
-    process.exec_timeout(700)
-    return 0
+    let cmd = env_or("TOOL_TIMEOUT_CMD", "sleep 1 && echo timeout-window")
+    return run_shell_to_file("timeout_probe", cmd, 700, last_run_path_for("timeout_probe"))
 }
 
 fn cancel_tool_run() -> i32 {
-    process.exit_class()
-    return 0
+    return proc.exit_class()
 }
 
 fn retry_with_backoff() -> i32 {
-    process.exec_timeout(100)
-    process.exec_timeout(200)
-    process.exec_timeout(400)
+    run_with_timeout()
+    proc.exec_timeout(100)
+    run_with_timeout()
+    proc.exec_timeout(200)
+    run_with_timeout()
     return 0
 }
 

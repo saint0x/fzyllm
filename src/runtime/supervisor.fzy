@@ -1,8 +1,12 @@
 use core.proc;
+use core.log;
 
 fn configure_limits() -> i32 {
-    log.info("runtime.supervisor configure_limits", log.fields2("component", "runtime.supervisor", "phase", "configure_limits"))
-    process.exec_timeout(500)
+    log.info("runtime.supervisor configure_limits", util.log_fields2("component", "runtime.supervisor", "phase", "configure_limits"))
+    runtime.limits.enforce_thread_limit()
+    runtime.limits.enforce_queue_depth()
+    runtime.limits.enforce_memory_budget()
+    proc.exec_timeout(500)
     return 0
 }
 
@@ -10,14 +14,14 @@ fn begin_shutdown() -> i32 {
     runtime.sandbox.deny_tool_scope()
     services.http.graceful_stop()
     runtime.recovery.recover_inflight_jobs()
-    process.exec_timeout(500)
+    proc.exec_timeout(500)
     return 0
 }
 
 fn run_forever() -> i32 {
-    log.info("runtime.supervisor started", log.fields2("component", "runtime.supervisor", "phase", "loop_start"))
+    log.info("runtime.supervisor started", util.log_fields2("component", "runtime.supervisor", "phase", "loop_start"))
     loop {
         runtime.events.emit_health_tick()
-        process.exec_timeout(200)
+        proc.exec_timeout(200)
     }
 }

@@ -1,10 +1,18 @@
 use core.proc;
+use core.fs;
+
+fn config_path() -> str {
+    return "/tmp/anthropic_smoke/runtime.config.json"
+}
 
 fn apply_server_config() -> i32 {
-    load_host()
-    load_port()
-    load_workers()
-    process.exec_timeout(200)
+    fs.mkdir("/tmp/anthropic_smoke")
+    let host = env.get("AGENT_HOST")
+    let port = env.get("AGENT_PORT")
+    let workers = env.get("AGENT_WORKERS")
+    let payload = util.json_obj3("host", json.str(host), "port", json.str(port), "workers", json.str(workers))
+    fs.write_file(config_path(), payload)
+    proc.exec_timeout(200)
     return 0
 }
 

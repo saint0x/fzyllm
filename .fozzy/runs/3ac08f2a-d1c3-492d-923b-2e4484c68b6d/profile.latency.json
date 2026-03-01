@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "fozzy.profile_latency.v1",
+  "runId": "3ac08f2a-d1c3-492d-923b-2e4484c68b6d",
+  "distribution": {
+    "count": 8,
+    "p50Ms": 0,
+    "p95Ms": 0,
+    "p99Ms": 0,
+    "maxMs": 0,
+    "variance": 0.0
+  },
+  "criticalPath": [
+    {
+      "fromSpan": "e-0",
+      "toSpan": "e-1",
+      "durationMs": 0,
+      "reason": "other"
+    },
+    {
+      "fromSpan": "e-1",
+      "toSpan": "e-2",
+      "durationMs": 0,
+      "reason": "other"
+    },
+    {
+      "fromSpan": "e-2",
+      "toSpan": "e-3",
+      "durationMs": 0,
+      "reason": "other"
+    },
+    {
+      "fromSpan": "e-3",
+      "toSpan": "e-4",
+      "durationMs": 0,
+      "reason": "other"
+    },
+    {
+      "fromSpan": "e-4",
+      "toSpan": "e-5",
+      "durationMs": 0,
+      "reason": "other"
+    },
+    {
+      "fromSpan": "e-5",
+      "toSpan": "e-6",
+      "durationMs": 0,
+      "reason": "other"
+    },
+    {
+      "fromSpan": "e-6",
+      "toSpan": "e-7",
+      "durationMs": 0,
+      "reason": "io"
+    },
+    {
+      "fromSpan": "e-7",
+      "toSpan": "e-8",
+      "durationMs": 0,
+      "reason": "other"
+    }
+  ],
+  "waitReasons": [
+    {
+      "reason": "io",
+      "count": 1
+    },
+    {
+      "reason": "other",
+      "count": 7
+    }
+  ]
+}

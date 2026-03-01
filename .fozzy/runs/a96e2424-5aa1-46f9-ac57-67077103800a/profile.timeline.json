@@ -1,0 +1,158 @@
+[
+  {
+    "t_virtual": 0,
+    "t_mono": 0,
+    "kind": "event",
+    "run_id": "a96e2424-5aa1-46f9-ac57-67077103800a",
+    "seed": 1095011284441601900,
+    "thread": "main",
+    "span_id": "e-0",
+    "tags": {
+      "name": "capability:fs"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 1,
+    "kind": "event",
+    "run_id": "a96e2424-5aa1-46f9-ac57-67077103800a",
+    "seed": 1095011284441601900,
+    "thread": "main",
+    "span_id": "e-1",
+    "parent_span_id": "e-0",
+    "tags": {
+      "name": "capability:mem"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 2,
+    "kind": "event",
+    "run_id": "a96e2424-5aa1-46f9-ac57-67077103800a",
+    "seed": 1095011284441601900,
+    "thread": "main",
+    "span_id": "e-2",
+    "parent_span_id": "e-1",
+    "tags": {
+      "name": "capability:net"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 3,
+    "kind": "event",
+    "run_id": "a96e2424-5aa1-46f9-ac57-67077103800a",
+    "seed": 1095011284441601900,
+    "thread": "main",
+    "span_id": "e-3",
+    "parent_span_id": "e-2",
+    "tags": {
+      "name": "capability:proc"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 4,
+    "kind": "event",
+    "run_id": "a96e2424-5aa1-46f9-ac57-67077103800a",
+    "seed": 1095011284441601900,
+    "thread": "main",
+    "span_id": "e-4",
+    "parent_span_id": "e-3",
+    "tags": {
+      "name": "capability:thread"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 5,
+    "kind": "event",
+    "run_id": "a96e2424-5aa1-46f9-ac57-67077103800a",
+    "seed": 1095011284441601900,
+    "thread": "main",
+    "span_id": "e-5",
+    "parent_span_id": "e-4",
+    "tags": {
+      "name": "capability:time"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 6,
+    "kind": "event",
+    "run_id": "a96e2424-5aa1-46f9-ac57-67077103800a",
+    "seed": 1095011284441601900,
+    "thread": "main",
+    "span_id": "e-6",
+    "parent_span_id": "e-5",
+    "tags": {
+      "name": "http.request.anthropic.start"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 7,
+    "kind": "io",
+    "run_id": "a96e2424-5aa1-46f9-ac57-67077103800a",
+    "seed": 1095011284441601900,
+    "thread": "main",
+    "span_id": "e-7",
+    "parent_span_id": "e-6",
+    "tags": {
+      "backend": "scripted",
+      "cmd": "python3",
+      "exit_code": "0",
+      "name": "proc_spawn",
+      "stderr": "",
+      "stdout": "{\"id\":\"deterministic.anthropic.stub\"}\n"
+    },
+    "cost": {
+      "duration_ms": 0,
+      "count": 1
+    }
+  },
+  {
+    "t_virtual": 0,
+    "t_mono": 8,
+    "kind": "event",
+    "run_id": "a96e2424-5aa1-46f9-ac57-67077103800a",
+    "seed": 1095011284441601900,
+    "thread": "main",
+    "span_id": "e-8",
+    "parent_span_id": "e-7",
+    "tags": {
+      "name": "http.request.anthropic.ok"
+    },
+    "cost": {
+      "count": 1
+    }
+  }
+]
